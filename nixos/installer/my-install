@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+mkpasswordfile() {
+  local encoder="$1"
+  local message="${2:-password}"
+  local password=''
+  local verification=x
+
+  while [[ $password != "$verification" ]]; do
+    echo >&2
+    IFS= read -rsp "Enter $message: " password
+    echo >&2
+    IFS= read -rsp "Repeat $message: " verification
+    echo >&2
+  done
+
+  printf %s "$password" | $encoder
+}
+
+passwordfiles=$(
+  nix eval --json \
+    "${FLAKE_URI:?}#nixosConfigurations.${TARGET_HOST:?}.config.users.users" |
+  jq --raw-output '
+    [ .[].hashedPasswordFile | select(. != null) ]
+    | map("/mnt" + .)
+    | join(" ")
+  '
+)
+
+for passwordfile in $passwordfiles; do
+  [ -e "$passwordfile" ] && continue
+  sudo mkdir -p "$(dirname "$passwordfile")"
+  mkpasswordfile 'mkpasswd -s' "password ($passwordfile)" |
+    sudo tee "$passwordfile" > /dev/null
+done
+
+set -x
+
+if [[ -d /mnt/persist ]]; then
+  sudo mkdir -p /mnt/persist/etc/ssh
+  sudo cp -a /etc/machine-id /mnt/persist/etc/
+fi
+
+sudo nixos-install --flake "$FLAKE_URI#$TARGET_HOST" --no-root-passwd
+
+if [[ -d /mnt/persist ]]; then
+  sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
+fi

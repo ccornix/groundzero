@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+set -x
+sudo disko --flake "${FLAKE_URI:?}#${TARGET_HOST:?}" "$@"
