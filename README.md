@@ -29,7 +29,9 @@ Therefore, feel free to grab some inspiration from this repo but do not use it a
 
    - Download the latest ISO from
 
-        wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
+     ```sh
+     wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
+     ```
 
    - If using an USB key, my preferred method is to use [Ventoy][ventoy]. In case of a VM, simply assign the ISO to its virtual CD drive.
 
@@ -37,21 +39,29 @@ Therefore, feel free to grab some inspiration from this repo but do not use it a
 
 3. Make `git` available and enter a host-specific installer devshell of this flake as follows
 
-        nix-shell -p git
-        flake_uri=git+https://codeberg.org/ccornix/groundzero
-        nix --experimental-features 'nix-command flakes' develop "$flake_uri#<hostname>"
+   ```sh
+   nix-shell -p git
+   flake_uri=git+https://codeberg.org/ccornix/groundzero
+   nix --experimental-features 'nix-command flakes' develop "$flake_uri#<hostname>"
+   ```
 
 4. Run disko using a custom script. To destroy existing data on the target disks and (re-)create file systems, run
 
-        my-disko --mode disko
+   ```sh
+   my-disko --mode disko
+   ```
 
    else to preserve existing file systems and mount them only, run
 
-        my-disko --mode mount
+   ```sh
+   my-disko --mode mount
+   ```
 
 5. Install NixOS and reboot if successful as
 
-        my-install && sudo reboot
+   ```sh
+   my-install && sudo reboot
+   ```
 
 That's all! :sunglasses:
 
@@ -61,10 +71,34 @@ That's all! :sunglasses:
    - experimental-features: nix-command flakes
    - custom flake update commit message
 
-2. Run the following as the target user:
+1. Run the following[^hmpkg] as the target user
 
-        flake_uri=git+https://codeberg.org/ccornix/groundzero
-        nix run "$flake_uri#home-manager" -- switch --flake "$flake_uri"
+   ```sh
+   flake_uri=git+https://codeberg.org/ccornix/groundzero
+   nix run "$flake_uri#home-manager" -- switch --flake "$flake_uri"
+   ```
+
+[^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by [`flake.lock`](./flake.lock)) so that the one performing the setup would be the same as the one used afterward.
+
+## Post-install tasks and development
+
+0. Generate SSH keys for the user of the fresh installation and register the public key where needed.
+
+1. Clone this repo to `~/dev/groundzero` for further development (assumed by the aliases in the next section).
+
+2. Within the local repo directory, install a `gitlint` commit-msg hook to check if commit messages adhere to the [Conventional Commits][conventional-commits] specification:
+
+   ```sh
+   gitlint install-hook
+   ```
+
+3. (NixOS installation only) Set up [Tailscale][tailscale] if included in the OS configuration:
+
+   ```sh
+   sudo tailscale up
+   ```
+
+   Visit the given URL to activate the host on the tailnet.
 
 ## Management
 
@@ -72,16 +106,16 @@ Below is a table of commands for common management tasks, where `URI` can either
 
 | Operation | Command | Own shell alias |
 |-----------|---------|-----------------|
-| Collect garbage (`sudo` if system-wide)[^1] | `sudo nix-collect-garbage [-d]` | |
+| Collect garbage (`sudo` if system-wide)[^gc] | `[sudo] nix-collect-garbage [-d]` | |
 | Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake URI` | `nr {switch\|boot}` |
 | Switch to new home config | `home-manager switch --flake URI` | `hm switch` |
-| Check the config[^2] | `nix flake check` | |
-| Format source files[^2] | `nix fmt` | |
-| Update & commit the lock file[^2] | `nix flake update --commit-lock-file` | |
+| Check the config[^repodir] | `nix flake check` | |
+| Format source files[^repodir] | `nix fmt` | |
+| Update & commit the lock file[^repodir] | `nix flake update --commit-lock-file` | |
 
-[^1]: The `-d` option also removes GC roots such as old system  and home configurations, making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is needed to clean up boot menu entries.
+[^gc]: The `-d` option also removes GC roots such as old system  and home configurations, making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is needed to clean up boot menu entries.
 
-[^2]: To be executed within the repo directory.
+[^repodir]: To be executed within the repo directory.
 
 ## Troubleshooting
 
@@ -123,7 +157,6 @@ NixOS:
 
 - Complete adding all SSH public keys for ccornix
 - Complete setting up all interfaces for systemd-network
-- Simplify installer and switch to `disko-install`
 - Sync dircolors, mc colors
 
 Home Manager:
@@ -151,3 +184,4 @@ In addition, this flake stands on the shoulders of other flake-giants, explicitl
 [tailscale]: https://tailscale.com
 [ventoy]: https://www.ventoy.net
 [dasj-dotfiles]: https://github.com/dasj/dotfiles
+[conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
