@@ -21,6 +21,9 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
+  # Clear misleading default help
+  services.getty.helpLine = lib.mkForce "";
+
   users.users.nixos.password = "nixos";
 
   isoImage = {
