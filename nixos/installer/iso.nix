@@ -1,4 +1,4 @@
-# Customized AMD64 installer ISO image
+# Customized installer ISO image
 
 { inputs, pkgs, modulesPath, ... }:
 
@@ -13,10 +13,12 @@
     variables.FLAKE0 = builtins.toString inputs.self.outPath;
   };
 
-  users.users.nixos.password = "nixos";
+  networking.networkmanager.enable = true;
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
+
+  users.users.nixos.password = "nixos";
 
   isoImage = {
     isoName = lib.mkForce "nixos.iso";
