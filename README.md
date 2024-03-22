@@ -5,7 +5,7 @@ A [Nix][nixos] [flake][nix-flakes] of personal [NixOS][nixos] and [Home Manager]
 Highlights:
 
 - Fully declarative configurations of multiple NixOS configurations of laptops and workstations
-- ZFS-based root file system with automatic partitioning and formatting provided by [disko][disko]
+- ZFS-based root file system with optional encryption and automatic partitioning and formatting provided by [disko][disko]
 - Ephemeral dataset for `/` (through restoring a blank snapshot on boot) and opt-in persistence with help of the [impermanence][impermanence] module
 - Mounted datasets nested under either `local` and `safe` parents, with only the latter group backed up (inspired by [Graham Christensen][erase-your-darlings])
 - Hosts in a private mesh network using [tailscale][tailscale]
@@ -23,24 +23,48 @@ Therefore, feel free to grab some inspiration from this repo but do not use it a
 
 ### NixOS
 
-0. (Prerequisite) It is assumed that the disko has been fully configured within the NixOS configurateion of the target machine. Otherwise, find out persistent virtual disk block device paths of the target machine in a live Linux enviromnent by comparing `lsblk` and `ls -l /dev/disk/by-id` outputs and edit the config accordingly.
+Tip: to boot ISO images from a USB key or external SSD, my preferred method is to use [Ventoy][ventoy].
 
-1. Boot a recent NixOS ISO image on the target machine.
+0. (Prerequisite) It is assumed that the NixOS configuration of the target machine has already been created in the flake. Otherwise,
+    - Download the latest NixOS ISO image using
 
-   - Download the latest ISO from
+        ```sh
+        wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
+        ```
 
-     ```sh
-     wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
-     ```
+      write it onto some external medium and boot it.
 
-   - If using an USB key, my preferred method is to use [Ventoy][ventoy]. In case of a VM, simply assign the ISO to its virtual CD drive.
+    - Find out persistent virtual disk block device paths of the target machine in a live enviromnent by comparing `lsblk` and `ls -l /dev/disk/by-id` outputs.
+    - Find out the MAC addresses of network interfaces using `ip a`.
+    - Have a look at the output of `nixos-generate-config --show-hardware-config --no-filesystems | less` for recommended kernel modules and other settings.
+    - Edit the config of the target machine accordingly.
 
-2. Ensure that the machine has wired or wireless network connection.
+1. (Optional) Prepare a NixOS ISO image.
 
-3. Make `git` available and enter a host-specific installer devshell of this flake as follows
+    - If you have access to a system where Nix is installed, it is preferred to build the ISO for yourself as
+
+        ```sh
+        TODO
+        ```
+
+      This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system. TODO: Moreover, the ISO then includes the flake itself and the required derivations in the Nix store, so a networkless install can be performed.
+
+    - Otherwise just use the latest NixOS ISO image.
+
+2. Boot the NixOS ISO image on the target machine.
+
+3. (If generic ISO image is used) Set the the `FLAKE0` environment variable to point to the online flake repo as
+
+    ```sh
+    export FLAKE0=github:ccornix/groundzero
+    ```
+
+    and ensure that the machine can Internet access.
+
+4. Enter a host-specific installer devshell of this flake as follows
 
    ```sh
-   nix --experimental-features 'nix-command flakes' develop github:ccornix/groundzero#<hostname>
+   nix --experimental-features 'nix-command flakes' develop $FLAKE0#<hostname>
    ```
 
 4. Run disko using a custom script. To destroy existing data on the target disks and (re-)create file systems, run
@@ -65,15 +89,22 @@ That's all! :sunglasses:
 
 ### Home Manager
 
-0. TODO: Also add info on necessary `nix.conf` settings on alien Linux distros!
-   - experimental-features: nix-command flakes
-   - custom flake update commit message
+0. (If running Nix on an alien Linux distro) Edit `nix.conf` settings:
+
+    - TODO: experimental-features: nix-command flakes
+
+    - TODO: custom flake update commit message
+
+   Moreover, set the `FLAKE0` environment variable as
+
+    ```sh
+    export FLAKE0=github:ccornix/groundzero
+    ```
 
 1. Run the following[^hmpkg] as the target user
 
    ```sh
-   flake_uri=github:ccornix/groundzero
-   nix run "$flake_uri#home-manager" -- switch --flake "$flake_uri"
+   nix run $FLAKE0#home-manager -- switch --flake $FLAKE0
    ```
 
 [^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by [`flake.lock`](./flake.lock)) so that the one performing the setup would be the same as the one used afterward.
@@ -82,7 +113,7 @@ That's all! :sunglasses:
 
 0. Generate SSH keys for the user of the fresh installation and register the public key where needed.
 
-1. Clone this repo to `~/dev/groundzero` for further development (assumed by the aliases in the next section).
+1. Clone this repo to TODO for further development.
 
 2. Within the local repo directory, install a `gitlint` commit-msg hook to check if commit messages adhere to the [Conventional Commits][conventional-commits] specification:
 
@@ -100,13 +131,13 @@ That's all! :sunglasses:
 
 ## Management
 
-Below is a table of commands for common management tasks, where `URI` can either be a reference to the online flake repo or a path to a local clone.
+Below is a table of commands for common management tasks, where environment variable `FLAKE0` can either be a reference to the online flake repo or a path to a local clone.
 
 | Operation | Command | Own shell alias |
 |-----------|---------|-----------------|
-| Collect garbage (`sudo` if system-wide)[^gc] | `[sudo] nix-collect-garbage [-d]` | |
-| Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake URI` | `nr {switch\|boot}` |
-| Switch to new home config | `home-manager switch --flake URI` | `hm switch` |
+| Collect garbage[^gc] | `[sudo] nix-collect-garbage [-d]` | |
+| Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake $FLAKE0` | `nr {switch\|boot}` |
+| Switch to new home config | `home-manager switch --flake $FLAKE0` | `hm switch` |
 | Check the config[^repodir] | `nix flake check` | |
 | Format source files[^repodir] | `nix fmt` | |
 | Update & commit the lock file[^repodir] | `nix flake update --commit-lock-file` | |
@@ -153,6 +184,8 @@ Credits: https://www.youtube.com/watch?v=t_7gBLUa600
 
 NixOS:
 
+- Establish custom ISO generation and ensure environment variable `FLAKE0` is
+  set
 - Complete adding all SSH public keys for ccornix
 - Complete setting up all interfaces for systemd-network
 - Sync dircolors, mc colors
