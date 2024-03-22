@@ -13,7 +13,10 @@
     variables.FLAKE0 = builtins.toString inputs.self.outPath;
   };
 
-  networking.networkmanager.enable = true;
+  networking = {
+    networkmanager.enable = true;
+    wireless.enable = false;  # Disable wpa_supplicant
+  };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
