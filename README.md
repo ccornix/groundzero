@@ -1,4 +1,4 @@
-# Ground Zero: personal NixOS and Home Manager configurations
+# Ground Zero
 
 A [Nix][nixos] [flake][nix-flakes] of personal [NixOS][nixos] and [Home Manager][home-manager] (HM) configurations.
 
@@ -40,9 +40,7 @@ Therefore, feel free to grab some inspiration from this repo but do not use it a
 3. Make `git` available and enter a host-specific installer devshell of this flake as follows
 
    ```sh
-   nix-shell -p git
-   flake_uri=git+https://codeberg.org/ccornix/groundzero
-   nix --experimental-features 'nix-command flakes' develop "$flake_uri#<hostname>"
+   nix --experimental-features 'nix-command flakes' develop github:ccornix/groundzero#<hostname>
    ```
 
 4. Run disko using a custom script. To destroy existing data on the target disks and (re-)create file systems, run
@@ -74,7 +72,7 @@ That's all! :sunglasses:
 1. Run the following[^hmpkg] as the target user
 
    ```sh
-   flake_uri=git+https://codeberg.org/ccornix/groundzero
+   flake_uri=github:ccornix/groundzero
    nix run "$flake_uri#home-manager" -- switch --flake "$flake_uri"
    ```
 
