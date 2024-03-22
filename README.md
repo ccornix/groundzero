@@ -133,14 +133,14 @@ That's all! :sunglasses:
 
 Below is a table of commands for common management tasks, where environment variable `FLAKE0` can either be a reference to the online flake repo or a path to a local clone.
 
-| Operation | Command | Own shell alias |
-|-----------|---------|-----------------|
-| Collect garbage[^gc] | `[sudo] nix-collect-garbage [-d]` | |
-| Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake $FLAKE0` | `nr {switch\|boot}` |
-| Switch to new home config | `home-manager switch --flake $FLAKE0` | `hm switch` |
-| Check the config[^repodir] | `nix flake check` | |
-| Format source files[^repodir] | `nix fmt` | |
-| Update & commit the lock file[^repodir] | `nix flake update --commit-lock-file` | |
+| Operation | Command (own alias) |
+|-----------|---------------------|
+| Collect garbage[^gc] | `[sudo] nix-collect-garbage [-d]` |
+| Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake $FLAKE0` (`nr {switch\|boot}`) |
+| Switch to new home config | `home-manager switch --flake $FLAKE0` (`hm switch`) |
+| Check the config[^repodir] | `nix flake check` |
+| Format source files[^repodir] | `nix fmt` |
+| Update the lock file[^repodir] | `nix flake update --commit-lock-file` |
 
 [^gc]: The `-d` option also removes GC roots such as old system  and home configurations, making it impossible to roll back to previous configs. Executing a `nixos-rebuild switch` is needed to clean up boot menu entries.
 
