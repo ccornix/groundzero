@@ -1,5 +1,5 @@
 {
-  description = "Personal NixOS configurations.";
+  description = "Personal NixOS and Home Manager configurations.";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
@@ -17,7 +17,7 @@
     };
     nix-colors.url = "github:misterio77/nix-colors";
     wallpapers = {
-      url = "git+https://codeberg.org/ccornix/wallpapers";
+      url = "github:ccornix/wallpapers";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
