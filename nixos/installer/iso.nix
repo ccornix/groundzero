@@ -1,6 +1,6 @@
 # Customized installer ISO image
 
-{ inputs, pkgs, modulesPath, ... }:
+{ inputs, pkgs, lib, modulesPath, ... }:
 
 {
   imports = [ "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix" ];
