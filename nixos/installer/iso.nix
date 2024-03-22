@@ -15,9 +15,13 @@
 
   users.users.nixos.password = "nixos";
 
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
 
-  # Reduce compression
-  # https://github.com/NixOS/nixpkgs/blob/50f9b3107a09ed35bbf3f9ab36ad2683619debd2/nixos/lib/make-squashfs.nix#L8Compression
-  isoImage.squashfsCompression = "zstd -Xcompression-level 6";
+  isoImage = {
+    isoName = lib.mkForce "nixos.iso";
+    # Reduce compression
+    # https://github.com/NixOS/nixpkgs/blob/50f9b3107a09ed35bbf3f9ab36ad2683619debd2/nixos/lib/make-squashfs.nix#L8Compression
+    squashfsCompression = "zstd -Xcompression-level 6";
+  };
 }
