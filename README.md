@@ -108,7 +108,7 @@ That's all! :sunglasses:
    nix run $FLAKE0#home-manager -- switch --flake $FLAKE0
    ```
 
-[^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by [`flake.lock`](./flake.lock)) so that the one performing the setup would be the same as the one used afterward.
+[^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by `flake.lock`) so that the one performing the setup would be the same as the one used afterward.
 
 ## Post-install tasks and development
 
