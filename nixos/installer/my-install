@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-mkpasswordfile() {
+mkpassword() {
   local encoder="$1"
   local message="${2:-password}"
   local password=''
@@ -21,7 +21,7 @@ mkpasswordfile() {
 
 passwordfiles=$(
   nix eval --json \
-    "${FLAKE_URI:?}#nixosConfigurations.${TARGET_HOST:?}.config.users.users" |
+    "${FLAKE0:?}#nixosConfigurations.${TARGET_HOST:?}.config.users.users" |
   jq --raw-output '
     [ .[].hashedPasswordFile | select(. != null) ]
     | map("/mnt" + .)
@@ -29,22 +29,23 @@ passwordfiles=$(
   '
 )
 
-for passwordfile in $passwordfiles; do
-  [ -e "$passwordfile" ] && continue
-  sudo mkdir -p "$(dirname "$passwordfile")"
-  mkpasswordfile 'mkpasswd -s' "password ($passwordfile)" |
-    sudo tee "$passwordfile" > /dev/null
+for pfile in $passwordfiles; do
+  [ -e "$pfile" ] && continue
+  sudo mkdir -p "$(dirname "$pfile")"
+  mkpassword 'mkpasswd -s' "password ($pfile)" | sudo tee "$pfile" > /dev/null
 done
 
 set -x
 
-if [[ -d /mnt/persist ]]; then
-  sudo mkdir -p /mnt/persist/etc/ssh
-  sudo cp -a /etc/machine-id /mnt/persist/etc/
-fi
+sudo mkdir -p /mnt/persist/etc/ssh
+sudo cp -a /etc/machine-id /mnt/persist/etc/
 
-sudo nixos-install --flake "$FLAKE_URI#$TARGET_HOST" --no-root-passwd
+sudo nixos-install --flake "$FLAKE0#$TARGET_HOST" --no-root-passwd
 
-if [[ -d /mnt/persist ]]; then
-  sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
-fi
+sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
+
+# Ensure there is a synced local copy of the installation flake
+localflake0=/mnt/persist/etc/groundzero
+[ -d "$localflake0" ] && rm -rf "$localflake0"
+sudo nix flake clone --dest "$localflake0" "$FLAKE0"
+sudo chown -R root:users "$localflake0"
