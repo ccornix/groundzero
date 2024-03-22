@@ -219,5 +219,5 @@ In addition, this flake stands on the shoulders of other flake-giants, explicitl
 [tailscale]: https://tailscale.com
 [ventoy]: https://www.ventoy.net
 [dasj-dotfiles]: https://github.com/dasj/dotfiles
-[installation-networking]: https://nixos.org/manual/nixos/stable/#sec-installation
+[installation-networking]: https://nixos.org/manual/nixos/stable/#sec-installation-manual
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
