@@ -23,11 +23,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1710379155,
-        "narHash": "sha256-zdHEsOOnfBTO1ymL6gd9etR+iNS6HowbJM4Llqxy+Uc=",
+        "lastModified": 1711006105,
+        "narHash": "sha256-pvjqjx4L2Hx/NP3RWcwLjk+ABtMODAJ9+rgreU6fP6I=",
         "owner": "nix-community",
         "repo": "disko",
-        "rev": "cc69c2340b59e290982ec7e6238471d470c839d0",
+        "rev": "a8c966ee117c278a5aabc6f00b00ef62eb7e28f6",
         "type": "github"
       },
       "original": {
@@ -43,11 +43,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1706981411,
-        "narHash": "sha256-cLbLPTL1CDmETVh4p0nQtvoF+FSEjsnJTFpTxhXywhQ=",
+        "lastModified": 1710888565,
+        "narHash": "sha256-s9Hi4RHhc6yut4EcYD50sZWRDKsugBJHSbON8KFwoTw=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "652fda4ca6dafeb090943422c34ae9145787af37",
+        "rev": "f33900124c23c4eca5831b9b5eb32ea5894375ce",
         "type": "github"
       },
       "original": {
@@ -93,11 +93,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1710283656,
-        "narHash": "sha256-nI+AOy4uK6jLGBi9nsbHjL1EdSIzoo8oa+9oeVhbyFc=",
+        "lastModified": 1710951922,
+        "narHash": "sha256-FOOBJ3DQenLpTNdxMHR2CpGZmYuctb92gF0lpiirZ30=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "51063ed4f2343a59fdeebb279bb81d87d453942b",
+        "rev": "f091af045dff8347d66d186a62d42aceff159456",
         "type": "github"
       },
       "original": {
@@ -124,11 +124,11 @@
     },
     "nixpkgs-unstable": {
       "locked": {
-        "lastModified": 1710272261,
-        "narHash": "sha256-g0bDwXFmTE7uGDOs9HcJsfLFhH7fOsASbAuOzDC+fhQ=",
+        "lastModified": 1710806803,
+        "narHash": "sha256-qrxvLS888pNJFwJdK+hf1wpRCSQcqA6W5+Ox202NDa0=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "0ad13a6833440b8e238947e47bea7f11071dc2b2",
+        "rev": "b06025f1533a1e07b6db3e75151caa155d1c7eb3",
         "type": "github"
       },
       "original": {
@@ -156,17 +156,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1710335501,
-        "narHash": "sha256-NZ9aiCTTSSklbtir9J/uHOldw6CYZXBl+lumhQtCbG4=",
-        "ref": "refs/heads/main",
-        "rev": "973f2018322a2f10cb9927332412314c2ca357b7",
-        "revCount": 17,
-        "type": "git",
-        "url": "https://codeberg.org/ccornix/wallpapers"
+        "lastModified": 1711058633,
+        "narHash": "sha256-PH/6a9804W0nMSpTmPnMEzuAm9JwchxLjNmLWMeucF4=",
+        "owner": "ccornix",
+        "repo": "wallpapers",
+        "rev": "9a9d2f944f3d07fe3642cad7d57e5dd983ba2a43",
+        "type": "github"
       },
       "original": {
-        "type": "git",
-        "url": "https://codeberg.org/ccornix/wallpapers"
+        "owner": "ccornix",
+        "repo": "wallpapers",
+        "type": "github"
       }
     }
   },
