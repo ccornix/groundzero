@@ -58,7 +58,7 @@
       lib = import ./lib inputs;
       overlays = import ./overlays inputs;
       nixosModules.default = import ./nixos/modules;
-      nixosConfigurations = mapListToAttrs mkNixosConfig (hosts ++ "iso");
+      nixosConfigurations = mapListToAttrs mkNixosConfig hosts;
       homeModules.default = import ./home/modules;
       homeConfigurations = mapListToAttrs (mkHomeConfig "ccornix") hosts;
       devShells = import ./nixos/installer inputs;
