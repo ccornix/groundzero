@@ -44,30 +44,31 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
     - If you have access to a system where Nix is installed, it is preferred to build the ISO for yourself as
 
         ```sh
-        TODO
+        nix --experimental-features 'nix-command flakes' build github:ccornix/groundzero#iso
         ```
 
       This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system. TODO: Moreover, the ISO then includes the flake itself and the required derivations in the Nix store, so a networkless install can be performed.
 
-    - Otherwise just use the latest NixOS ISO image.
+    - Otherwise just use the latest minimal NixOS ISO image.
 
 2. Boot the NixOS ISO image on the target machine.
 
-3. (If generic ISO image is used) Set the the `FLAKE0` environment variable to point to the online flake repo as
+3. Ensure that the machine has Internet access. To connect to a Wifi network, the custom ISO enables NetworkManager and the `nmtui` tool, while in case of the generic ISO image, the [NixOS manual][installation-networking] provides guidance on using `wpa_supplicant` and `wpa_cli`.
+
+4. (If generic ISO image is used) Enable experimental features of Nix and export the `FLAKE0` environment variable to point to the online flake repo as
 
     ```sh
+    export NIX_CONFIG='experimental-features = nix-command flakes'
     export FLAKE0=github:ccornix/groundzero
     ```
 
-    and ensure that the machine can Internet access.
-
-4. Enter a host-specific installer devshell of this flake as follows
+5. Enter a host-specific installer devshell of this flake as follows
 
    ```sh
-   nix --experimental-features 'nix-command flakes' develop $FLAKE0#<hostname>
+   nix develop $FLAKE0#<hostname>
    ```
 
-4. Run disko using a custom script. To destroy existing data on the target disks and (re-)create file systems, run
+6. Run disko using a custom script. To destroy existing data on the target disks and (re-)create file systems, run
 
    ```sh
    my-disko --mode disko
@@ -79,7 +80,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
    my-disko --mode mount
    ```
 
-5. Install NixOS and reboot if successful as
+7. Install NixOS and reboot if successful as
 
    ```sh
    my-install && sudo reboot
@@ -113,11 +114,16 @@ That's all! :sunglasses:
 
 0. Generate SSH keys for the user of the fresh installation and register the public key where needed.
 
-1. Clone this repo to TODO for further development.
-
-2. Within the local repo directory, install a `gitlint` commit-msg hook to check if commit messages adhere to the [Conventional Commits][conventional-commits] specification:
+1. Since the HM configuration redefines the `FLAKE0` variable to point to a directory inside the home directory of the user, ensure that this flake is cloned there:
 
    ```sh
+   nix flake clone --dest $FLAKE0 github:ccornix/groundzero
+   ```
+
+2. Within the local repo directory, install a `gitlint` commit-msg hook to ensure that future commit messages adhere to the [Conventional Commits][conventional-commits] specification:
+
+   ```sh
+   cd $FLAKE0
    gitlint install-hook
    ```
 
@@ -184,8 +190,6 @@ Credits: https://www.youtube.com/watch?v=t_7gBLUa600
 
 NixOS:
 
-- Establish custom ISO generation and ensure environment variable `FLAKE0` is
-  set
 - Complete adding all SSH public keys for ccornix
 - Complete setting up all interfaces for systemd-network
 - Sync dircolors, mc colors
@@ -215,4 +219,5 @@ In addition, this flake stands on the shoulders of other flake-giants, explicitl
 [tailscale]: https://tailscale.com
 [ventoy]: https://www.ventoy.net
 [dasj-dotfiles]: https://github.com/dasj/dotfiles
+[installation-networking]: https://nixos.org/manual/nixos/stable/#sec-installation
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
