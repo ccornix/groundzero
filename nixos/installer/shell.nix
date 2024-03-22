@@ -5,6 +5,7 @@ pkgs.stdenvNoCC.mkDerivation {
   buildInputs = [
     pkgs.coreutils
     pkgs.disko
+    pkgs.git
     pkgs.jq
     pkgs.mkpasswd
     pkgs.wget
@@ -19,5 +20,5 @@ pkgs.stdenvNoCC.mkDerivation {
   # Environment variables
   NIX_CONFIG = "experimental-features = nix-command flakes";
   TARGET_HOST = config.networking.hostName;
-  FLAKE_URI = builtins.toString inputs.self.outPath;
+  FLAKE0 = builtins.toString inputs.self.outPath;
 }
