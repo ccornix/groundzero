@@ -41,13 +41,13 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
 
 1. (Optional) Prepare a NixOS ISO image.
 
-    - If you have access to a system where Nix is installed, it is preferred to build the ISO for yourself as
+    - If you have access to a system where Nix is installed, it is preferred to build the ISO image for yourself as
 
         ```sh
         nix --experimental-features 'nix-command flakes' build github:ccornix/groundzero#iso
         ```
 
-      This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system. TODO: Moreover, the ISO then includes the flake itself and the required derivations in the Nix store, so a networkless install can be performed.
+      The resulting ISO image is then located at `./result/iso/nixos.iso`. This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system.
 
     - Otherwise just use the latest minimal NixOS ISO image.
 
