@@ -2,14 +2,14 @@
 
 {
   home.sessionVariables = {
-    HOME_CONFIG_REPODIR = "${config.home.homeDirectory}/dev/groundzero";
+    FLAKE0 = "${config.xdg.configHome}/groundzero";
   };
 
   programs.bash = {
     enable = true;
     historyFile = "${config.xdg.cacheHome}/bash/history";
     shellAliases = {
-      hm = "home-manager --flake $HOME_CONFIG_REPODIR ";
+      hm = "home-manager --flake $FLAKE0 ";
       ls = "ls --color=auto";
       ll = "ls -lah --group-directories-first";
       grep = "grep --color=auto";
