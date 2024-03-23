@@ -93,7 +93,7 @@ That's all! :sunglasses:
 
     ```sh
     nixconf=${XDG_CONFIG_HOME:-$HOME/.config}/nix/nix.conf
-    mkdir -p $(basename $nixconf)
+    mkdir -p $(dirname $nixconf)
     echo 'experimental-features = nix-command flakes' >> $nixconf
     echo 'commit-lockfile-summary = chore: update flake.lock' >> $nixconf
     ```
