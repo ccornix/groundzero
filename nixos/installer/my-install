@@ -46,6 +46,6 @@ sudo cp -ar /mnt/etc/ssh/authorized_keys.d /mnt/persist/etc/ssh/
 
 # Ensure there is a synced local copy of the installation flake
 localflake0=/mnt/persist/etc/groundzero
-[ -d "$localflake0" ] && rm -rf "$localflake0"
+[ -d "$localflake0" ] && sudo rm -rf "$localflake0"
 sudo nix flake clone --dest "$localflake0" "$FLAKE0"
 sudo chown -R root:users "$localflake0"
