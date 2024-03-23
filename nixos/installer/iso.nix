@@ -15,7 +15,7 @@
 
   networking = {
     networkmanager.enable = true;
-    wireless.enable = false;  # Disable wpa_supplicant
+    wireless.enable = false; # Disable wpa_supplicant
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

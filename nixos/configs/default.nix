@@ -16,4 +16,4 @@ let
     }
   );
 in
-  self.lib.mapListToAttrs mkNixosConfig hosts
+self.lib.mapListToAttrs mkNixosConfig hosts

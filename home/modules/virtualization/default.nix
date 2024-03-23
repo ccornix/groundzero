@@ -8,6 +8,5 @@ in
     enable = lib.mkEnableOption "virtualization";
   };
 
-  config = lib.mkIf cfg.enable {
-  };
+  config = lib.mkIf cfg.enable { };
 }

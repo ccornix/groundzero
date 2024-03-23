@@ -13,14 +13,15 @@ let
       });
 
       # Only provide an installer shell to those hosts that have a disko config
-      shell = if (! builtins.hasAttr "disko" config)
+      shell =
+        if (! builtins.hasAttr "disko" config)
         then null
         else import ./shell.nix { inherit config pkgs inputs; };
     in
     lib.optionalAttrs (shell != null) { ${system}.${name} = shell; };
 in
-  self.lib.recursiveMergeAttrs (
-    builtins.filter
-      (x: x != { })
-      (lib.mapAttrsToList mkInstallerShell self.nixosConfigurations)
-  )
+self.lib.recursiveMergeAttrs (
+  builtins.filter
+    (x: x != { })
+    (lib.mapAttrsToList mkInstallerShell self.nixosConfigurations)
+)

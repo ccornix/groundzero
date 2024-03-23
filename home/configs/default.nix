@@ -5,8 +5,8 @@ let
 
   inventory = (
     lib.mapAttrsToList
-    (host: config: { user = "ccornix"; inherit host; inherit (config) pkgs; })
-    self.nixosConfigurations
+      (host: config: { user = "ccornix"; inherit host; inherit (config) pkgs; })
+      self.nixosConfigurations
   ) ++ [
     # {
     #   user = "ccornix";
@@ -23,4 +23,4 @@ let
     }
   );
 in
-  self.lib.mapListToAttrs mkHomeConfig inventory
+self.lib.mapListToAttrs mkHomeConfig inventory
