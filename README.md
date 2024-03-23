@@ -2,14 +2,13 @@
 
 A [Nix][nixos] [flake][nix-flakes] of personal [NixOS][nixos] and [Home Manager][home-manager] (HM) configurations.
 
-Highlights:
+NixOS configuration highlights:
 
 - Fully declarative configurations of multiple NixOS configurations of laptops and workstations
 - ZFS-based root file system with optional encryption and automatic partitioning and formatting provided by [disko][disko]
 - Ephemeral dataset for `/` (through restoring a blank snapshot on boot) and opt-in persistence with help of the [impermanence][impermanence] module
 - Mounted datasets nested under either `local` and `safe` parents, with only the latter group backed up (inspired by [Graham Christensen][erase-your-darlings])
-- Hosts in a private mesh network using [tailscale][tailscale]
-- TODO: HM highlights
+- Hosts in a private mesh network using [Tailscale][tailscale]
 
 ## Warning :warning:
 
@@ -90,13 +89,17 @@ That's all! :sunglasses:
 
 ### Home Manager
 
-0. (If running Nix on an alien Linux distro) Edit `nix.conf` settings:
+0. (If running Nix on an alien Linux distro) Edit `nix.conf` settings (by default available at `~/.config/nix/nix.conf`). Add
 
-    - TODO: experimental-features: nix-command flakes
+   `experimental-features = nix-command flakes`
 
-    - TODO: custom flake update commit message
+   to enable the new Nix command interface and Flakes support, and
 
-   Moreover, set the `FLAKE0` environment variable as
+   `commit-lockfile-summary = chore: update flake.lock`
+
+   to make the message of automatic lockfile commits follow the [Conventional Commits][conventional-commits] specification.
+
+   In addition, set the `FLAKE0` environment variable as
 
     ```sh
     export FLAKE0=github:ccornix/groundzero
@@ -190,6 +193,7 @@ Credits: https://www.youtube.com/watch?v=t_7gBLUa600
 
 NixOS:
 
+- Complete the configuration of `thyme`
 - Complete adding all SSH public keys for ccornix
 - Complete setting up all interfaces for systemd-network
 - Sync dircolors, mc colors
