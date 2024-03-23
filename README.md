@@ -89,15 +89,16 @@ That's all! :sunglasses:
 
 ### Home Manager
 
-0. (If running Nix on an alien Linux distro) Edit `nix.conf` settings (by default available at `~/.config/nix/nix.conf`). Add
+0. (If running Nix on an alien Linux distro) Set up `nix.conf`:
 
-   `experimental-features = nix-command flakes`
+    ```sh
+    nixconf=${XDG_CONFIG_HOME:-$HOME/.config}/nix/nix.conf
+    mkdir -p $(basename $nixconf)
+    echo 'experimental-features = nix-command flakes' >> $nixconf
+    echo 'commit-lockfile-summary = chore: update flake.lock' >> $nixconf
+    ```
 
-   to enable the new Nix command interface and Flakes support, and
-
-   `commit-lockfile-summary = chore: update flake.lock`
-
-   to make the message of automatic lockfile commits follow the [Conventional Commits][conventional-commits] specification.
+   The last `nix.conf` setting makes automatic lockfile commits follow the [Conventional Commits][conventional-commits] specification.
 
    In addition, set the `FLAKE0` environment variable as
 
