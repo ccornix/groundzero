@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 let
   cfg = config.my.gaming.devilutionx;
+
+  inherit (pkgs.stdenv.hostPlatform) system;
+  myPkgs = inputs.self.packages.${system};
 in
 {
   options.my.gaming.devilutionx = with lib; {
@@ -10,9 +13,9 @@ in
 
   config = lib.mkIf cfg.enable {
     home = {
-      packages = with pkgs; [
-        innoextract # For extracting data from GoG Windows exe-files
-        my.devilutionx
+      packages = [
+        pkgs.innoextract # For extracting data from GoG Windows exe-files
+        myPkgs.devilutionx
       ];
 
       shellAliases = {

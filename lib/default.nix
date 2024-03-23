@@ -16,6 +16,8 @@ in
 {
   inherit recursiveMergeAttrs;
 
+  mapListToAttrs = f: xs: builtins.listToAttrs (map f xs);
+
   filterExistingGroups = config: groups:
     builtins.filter (x: builtins.hasAttr x config.users.groups) groups;
 

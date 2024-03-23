@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     impermanence.url = "github:nix-community/impermanence";
     disko = {
@@ -26,41 +26,13 @@
     let
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      mapListToAttrs = f: xs: builtins.listToAttrs (map f xs);
-
-      specialArgs = { inherit inputs; };
-
-      hosts = [
-        "parsley"
-        "sage"
-        "rosemary"
-        # "thyme"
-        "garlic"
-      ];
-
-      mkNixosConfig = host: nixpkgs.lib.nameValuePair host (
-        nixpkgs.lib.nixosSystem {
-          inherit specialArgs;
-          modules = [ ./nixos/configs/${host}.nix ];
-        }
-      );
-
-      mkHomeConfig = user: host: nixpkgs.lib.nameValuePair "${user}@${host}" (
-        home-manager.lib.homeManagerConfiguration {
-          extraSpecialArgs = specialArgs;
-          inherit (self.nixosConfigurations.${host}) pkgs;
-          modules = [ ./home/configs/${user}_at_${host}.nix ];
-        }
-      );
-
     in
     {
       lib = import ./lib inputs;
-      overlays = import ./overlays inputs;
       nixosModules.default = import ./nixos/modules;
-      nixosConfigurations = mapListToAttrs mkNixosConfig hosts;
+      nixosConfigurations = import ./nixos/configs inputs;
       homeModules.default = import ./home/modules;
-      homeConfigurations = mapListToAttrs (mkHomeConfig "ccornix") hosts;
+      homeConfigurations = import ./home/configs inputs;
       devShells = import ./nixos/installer inputs;
       formatter = forAllSystems (system:
         nixpkgs.legacyPackages.${system}.nixpkgs-fmt
