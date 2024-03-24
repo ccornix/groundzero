@@ -1,4 +1,4 @@
-# FIXME: ThinkPad X230 (coreboot)
+# ThinkPad X230 (coreboot)
 
 { inputs, config, lib, ... }:
 
@@ -13,11 +13,10 @@
   my = {
     desktop.enable = true;
     network = {
-      # FIXME: fill
-      # interfaces = {
-      #   wired = { wired0 = ""; };
-      #   wireless = { wireless0 = ""; };
-      # };
+      interfaces = {
+        wired = { wired0 = "3c:97:0e:aa:52:ab"; };
+        wireless = { wireless0 = "00:6b:9e:01:c4:36"; };
+      };
       shares.enable = true;
       tailscale.enable = true;
     };
@@ -27,11 +26,24 @@
 
   boot = {
     initrd.availableKernelModules = [
-      # FIXME
+      "ahci"
+      "ehci_pci"
+      "sd_mod"
+      "sdhci_pci"
+      "uas"
+      "xhci_pci"
     ];
     kernelModules = [ "kvm-intel" ];
+    blacklistedKernelModules = [ "mei" "mei_me" ];
 
-    # FIXME: GRUB
+    loader.grub = {
+      enable = true;
+      version = 2;
+      devices = with config.disko.devices.disk; [
+        system1.device
+        system2.device
+      ];
+    };
   };
 
   # neededForBoot flag is not settable from disko
@@ -64,25 +76,153 @@
     disk = {
       system1 = {
         type = "disk";
-        device = "/dev/disk/by-id/TODO";
+        device = "/dev/disk/by-id/wwn-0x57c35481a3ac4f8c";
         content = {
           type = "gpt";
           partitions = {
-            # TODO
+            biosboot1 = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
+            };
+            boot1 = {
+              size = "512M";
+              content = {
+                type = "mdraid";
+                name = "boot";
+              };
+            }; # boot1
+            zfs1 = {
+              size = "100%";
+              content = {
+                type = "zfs";
+                pool = "rpool";
+              };
+            }; # zfs1
           }; # partitions
         }; # content
       }; # system1
       system2 = {
         type = "disk";
-        device = "/dev/disk/by-id/TODO";
+        device = "/dev/disk/by-id/wwn-0x57c35481a213e4a4";
         content = {
           type = "gpt";
           partitions = {
-            # TODO
+            biosboot2 = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
+            };
+            boot2 = {
+              size = "512M";
+              content = {
+                type = "mdraid";
+                name = "boot";
+              };
+            }; # boot2
+            zfs2 = {
+              size = "100%";
+              content = {
+                type = "zfs";
+                pool = "rpool";
+              };
+            }; # zfs2
           }; # partitions
         }; # content
       }; # system2
     }; # disk
-    # TODO
+    mdadm = {
+      boot = {
+        type = "mdadm";
+        level = 1;
+        metadata = "1.0";
+        content = {
+          type = "filesystem";
+          format = "ext4";
+          mountpoint = "/boot";
+        }; # content
+      }; # boot
+    }; # mdadm
+    zpool = {
+      rpool = {
+        type = "zpool";
+        rootFsOptions = {
+          acltype = "posixacl";
+          dnodesize = "auto";
+          canmount = "off";
+          xattr = "sa";
+          relatime = "on";
+          normalization = "formD";
+          mountpoint = "none";
+          encryption = "aes-256-gcm";
+          keyformat = "passphrase";
+          keylocation = "prompt";
+          compression = "lz4";
+          "com.sun:auto-snapshot" = "false";
+        };
+        options = {
+          ashift = "12";
+          autotrim = "on";
+        };
+
+        datasets = {
+          local = {
+            type = "zfs_fs";
+            options.mountpoint = "none";
+          };
+          safe = {
+            type = "zfs_fs";
+            options.mountpoint = "none";
+          };
+          "local/reserved" = {
+            type = "zfs_fs";
+            options = {
+              mountpoint = "none";
+              reservation = "5GiB";
+            };
+          };
+          "local/root" = {
+            type = "zfs_fs";
+            mountpoint = "/";
+            options.mountpoint = "legacy";
+            postCreateHook = ''
+              zfs snapshot rpool/local/root@blank
+            '';
+          };
+          "local/nix" = {
+            type = "zfs_fs";
+            mountpoint = "/nix";
+            options = {
+              atime = "off";
+              canmount = "on";
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
+          };
+          "local/log" = {
+            type = "zfs_fs";
+            mountpoint = "/var/log";
+            options = {
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
+          };
+          "safe/home" = {
+            type = "zfs_fs";
+            mountpoint = "/home";
+            options = {
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
+          };
+          "safe/persist" = {
+            type = "zfs_fs";
+            mountpoint = "/persist";
+            options = {
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
+          };
+        }; # datasets
+      }; # rpool
+    }; # zpool
   }; # disko.devices
 }
