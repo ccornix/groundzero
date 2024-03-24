@@ -5,7 +5,7 @@ let
     "parsley"
     "sage"
     "rosemary"
-    # "thyme"
+    "thyme"
     "garlic"
   ];
 
