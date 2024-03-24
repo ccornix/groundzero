@@ -35,6 +35,8 @@
     ];
     kernelModules = [ "kvm-intel" ];
     blacklistedKernelModules = [ "mei" "mei_me" ];
+
+    # Let disko set up `boot.loader.grub.devices`
     loader.grub.enable = true;
 
     # HACK: silence mdadm warning on missing MAILADDR or PROGRAM setting
