@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 
 {
   home = {
@@ -10,4 +10,6 @@
     userName = "ccornix";
     userEmail = "ccornix1758@gmail.com";
   };
+
+  my.flakeURI = "${config.home.homeDirectory}/dev/groundzero";
 }

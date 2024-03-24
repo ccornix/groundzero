@@ -1,15 +1,13 @@
 { config, lib, ... }:
 
 {
-  home.sessionVariables = {
-    FLAKE0 = "${config.xdg.configHome}/groundzero";
-  };
+  home.sessionVariables.FLAKE0 = config.my.flakeURI;
 
   programs.bash = {
     enable = true;
     historyFile = "${config.xdg.cacheHome}/bash/history";
     shellAliases = {
-      hm = "home-manager --flake $FLAKE0 ";
+      hm = ''home-manager --flake "$FLAKE0" '';
       ls = "ls --color=auto";
       ll = "ls -lah --group-directories-first";
       grep = "grep --color=auto";
