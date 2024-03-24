@@ -161,7 +161,7 @@
           ashift = "12";
           autotrim = "on";
         };
-
+        mode = "mirror";
         datasets = {
           local = {
             type = "zfs_fs";
