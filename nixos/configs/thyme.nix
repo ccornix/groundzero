@@ -1,6 +1,6 @@
 # ThinkPad X230 (coreboot)
 
-{ inputs, config, lib, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -35,15 +35,12 @@
     ];
     kernelModules = [ "kvm-intel" ];
     blacklistedKernelModules = [ "mei" "mei_me" ];
+    loader.grub.enable = true;
 
-    loader.grub = {
-      enable = true;
-      version = 2;
-      devices = with config.disko.devices.disk; [
-        system1.device
-        system2.device
-      ];
-    };
+    # HACK: silence mdadm warning on missing MAILADDR or PROGRAM setting
+    swraid.mdadmConf = ''
+      PROGRAM ${pkgs.coreutils}/bin/true
+    '';
   };
 
   # neededForBoot flag is not settable from disko
