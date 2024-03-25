@@ -4,9 +4,9 @@
   imports = [ inputs.self.homeModules.default ./ccornix.nix ];
 
   my = {
-    desktop.enable = false; # FIXME
+    desktop.enable = true;
     gaming = {
-      devilutionx.enable = false; # FIXME
+      devilutionx.enable = true;
     };
   };
 
