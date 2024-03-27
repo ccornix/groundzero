@@ -190,20 +190,6 @@ and -- if necessary -- move some entries around specifying their actual number a
 
 Credits: https://www.youtube.com/watch?v=t_7gBLUa600
 
-## To-do list
-
-NixOS:
-
-- Complete the configuration of `thyme`
-- Complete adding all SSH public keys for ccornix
-- Complete setting up all interfaces for systemd-network
-- Sync dircolors, mc colors
-
-Home Manager:
-
-- Sync dircolors, mc colors
-- Add mc directory hotlist, custom quick menu
-
 ## References
 
 Some parts of this flake were inspired by the following flakes:
