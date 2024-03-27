@@ -14,9 +14,9 @@ NixOS configuration highlights:
 
 There may be some rough edges as Nix Flakes are still considered experimental.
 
-This flake contains private system configurations; it is not guaranteed to work for anyone but myself, and may change swiftly and randomly without warning!
+This flake contains private system configurations; it is not guaranteed to work for anyone but myself, and may change swiftly and randomly without warning! For incomplete features and planned changes, check out the [to-do list](./TODO.md).
 
-Therefore, feel free to grab some inspiration from this repo but do not use it as a dependency. *"You don't want my crap, you want your own."* ([dasJ][dasj-dotfiles])
+Feel free to grab some inspiration from this repo but do not use it as a dependency. *"You don't want my crap, you want your own."* ([dasJ][dasj-dotfiles])
 
 ## Installation
 
