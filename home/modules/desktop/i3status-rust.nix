@@ -1,6 +1,6 @@
 # Config of i3status-rust, a status bar generator for Sway bar
 
-{ config, lib, pkgs, ... }:
+{ config, lib, ... }:
 
 let
   cfg = config.my.desktop.i3statusRust;
@@ -9,10 +9,16 @@ in
   options.my.desktop.i3statusRust.enable = lib.mkEnableOption "i3status-rust";
 
   config = lib.mkIf cfg.enable {
-    # WORKAROUND
-    xdg.configFile."i3status-rust/config.toml".source =
-      config.lib.file.mkOutOfStoreSymlink
-        "${config.xdg.configHome}/i3status-rust/config-default.toml";
+    # HACK: i3status-rust looks for config.toml but that one is not written
+    # xdg.configFile."i3status-rust/config.toml".source =
+    #   config.lib.file.mkOutOfStoreSymlink
+    #     "${config.xdg.configHome}/i3status-rust/config-default.toml";
+    # HACK: workaround because Nix >= 2.19 has a bug with mkOutOfStoreSymlink
+    # https://github.com/nix-community/home-manager/issues/4692
+    home.activation.updateLinks = ''
+      export ROOT="${config.home.homeDirectory}/.config/i3status-rust"
+      ln -sf "$ROOT/config-default.toml" "$ROOT/config.toml"
+    '';
 
     programs.i3status-rust = with config.colorScheme.palette; {
       enable = true;
