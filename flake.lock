@@ -139,11 +139,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1711058633,
-        "narHash": "sha256-PH/6a9804W0nMSpTmPnMEzuAm9JwchxLjNmLWMeucF4=",
+        "lastModified": 1711710186,
+        "narHash": "sha256-gTeGMlNFZUtPH+dDx+yOUMeGs/8uc4amiucOQ6KFfQA=",
         "owner": "ccornix",
         "repo": "wallpapers",
-        "rev": "9a9d2f944f3d07fe3642cad7d57e5dd983ba2a43",
+        "rev": "fc742e9a95a63e3a915931b9a99663b1b1aadc83",
         "type": "github"
       },
       "original": {
