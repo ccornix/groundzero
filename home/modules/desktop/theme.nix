@@ -3,10 +3,8 @@
 { inputs, config, pkgs, lib, ... }:
 
 let
-  inherit (inputs) nix-colors wallpapers;
+  inherit (inputs) wallpapers;
   inherit (pkgs.stdenv.hostPlatform) system;
-
-  nix-colors-lib = nix-colors.lib-contrib { inherit pkgs; };
 
   cfg = config.my.desktop.theme;
 
@@ -17,9 +15,7 @@ let
     lib.optional (pkg != null) pkg;
 
   defaultWallpaperPkg = wallpapers.packages.${system}.hexagons.override {
-    palette = map (x: "#${x}") (
-      builtins.attrValues config.colorScheme.palette
-    );
+    palette = builtins.attrValues config.colorScheme.palette;
     width = config.my.primaryDisplayResolution.horizontal;
   };
 
@@ -34,7 +30,7 @@ in
         description = ''
           Path to the wallpaper.
         '';
-        default = "${defaultWallpaperPkg}/wallpaper.png";
+        default = defaultWallpaperPkg.filePath;
       };
 
       scaling = lib.mkOption {
