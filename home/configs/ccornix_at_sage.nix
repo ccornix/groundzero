@@ -1,10 +1,21 @@
-{ inputs, pkgs, lib, ... }:
+{ inputs, config, pkgs, ... }:
 
+let
+  inherit (inputs) wallpapers;
+  inherit (pkgs.stdenv.hostPlatform) system;
+  wallpaperPkg = wallpapers.packages.${system}.kochflakes3.override {
+    palette = builtins.attrValues config.colorScheme.palette;
+    width = config.my.primaryDisplayResolution.horizontal;
+  };
+in
 {
   imports = [ inputs.self.homeModules.default ./ccornix.nix ];
 
   my = {
-    desktop.enable = true;
+    desktop = {
+      enable = true;
+      theme.wallpaper.path = wallpaperPkg.filePath;
+    };
     gaming = {
       devilutionx.enable = true;
       diablo2.enable = true;
