@@ -1,6 +1,6 @@
 [general]
 # Ignore rules, reference them by id or name (comma-separated)
-ignore=body-is-missing
+ignore=body-is-missing,body-max-line-length
 
 # Enable specific community contributed rules
 contrib=contrib-title-conventional-commits
