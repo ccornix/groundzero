@@ -13,7 +13,7 @@ vim.g.loaded_netrwPlugin = 1
 
 -- Misc {{{
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' } -- for cmp-nvim-lsp
-vim.opt.mouse = 'a' -- mouse support in all modes
+vim.opt.mouse = '' -- disable mouse support
 -- }}}
 
 -- Colors {{{
