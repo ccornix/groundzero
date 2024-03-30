@@ -26,7 +26,6 @@ let
     (import ./swaywm/scripts.nix { inherit lib pkgs; });
 
   mkCmdFunc = cmd: op: "exec ${cmd} ${op}";
-  # mkCmdFuncToWob = cmd: op: "exec ${cmd} ${op} > $SWAYSOCK.wob";
 
   screenshotCmd = mkCmdFunc
     "${scripts.my-sway-screenshot}/bin/my-sway-screenshot";
@@ -65,7 +64,6 @@ in
         # https://github.com/swaywm/sway/issues/595
         export _JAVA_AWT_WM_NONREPARENTING=1
         export DESKTOP_SESSION=gnome
-        # eval $(/run/wrappers/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh --daemonize 2>/dev/null)
         export SSH_AUTH_SOCK
       '' + homeSessionVariables;
       config = rec {
@@ -188,38 +186,34 @@ in
         up = "k";
         right = "l";
 
-        keybindings =
-          let
-            locked = key: "--locked ${key}";
-          in
-          lib.mkOptionDefault (
-            {
-              # Move workspaces between monitors
-              "${mod}+${altMod}+${left}" = "move workspace to output left";
-              "${mod}+${altMod}+${down}" = "move workspace to output down";
-              "${mod}+${altMod}+${up}" = "move workspace to output up";
-              "${mod}+${altMod}+${right}" = "move workspace to output right";
-              "${mod}+${altMod}+Left" = "move workspace to output left";
-              "${mod}+${altMod}+Down" = "move workspace to output down";
-              "${mod}+${altMod}+Up" = "move workspace to output up";
-              "${mod}+${altMod}+Right" = "move workspace to output right";
+        keybindings = lib.mkOptionDefault (
+          {
+            # Move workspaces between monitors
+            "${mod}+${altMod}+${left}" = "move workspace to output left";
+            "${mod}+${altMod}+${down}" = "move workspace to output down";
+            "${mod}+${altMod}+${up}" = "move workspace to output up";
+            "${mod}+${altMod}+${right}" = "move workspace to output right";
+            "${mod}+${altMod}+Left" = "move workspace to output left";
+            "${mod}+${altMod}+Down" = "move workspace to output down";
+            "${mod}+${altMod}+Up" = "move workspace to output up";
+            "${mod}+${altMod}+Right" = "move workspace to output right";
 
-              # Audio and brightness controls
-              # HACK: include --locked in the key name to enable these bindings
-              # even if the screen is locked.
-              "--locked XF86AudioRaiseVolume" = volumeCmd "raise";
-              "--locked XF86AudioLowerVolume" = volumeCmd "lower";
-              "--locked XF86AudioMute" = volumeCmd "toggle-mute";
-              "--locked XF86AudioMicMute" = volumeCmd "toggle-mute-mic";
-              "--locked XF86MonBrightnessUp" = brightnessCmd "raise";
-              "--locked XF86MonBrightnessDown" = brightnessCmd "lower";
+            # Audio and brightness controls
+            # HACK: include --locked in the key name to enable these bindings
+            # even if the screen is locked.
+            "--locked XF86AudioRaiseVolume" = volumeCmd "raise";
+            "--locked XF86AudioLowerVolume" = volumeCmd "lower";
+            "--locked XF86AudioMute" = volumeCmd "toggle-mute";
+            "--locked XF86AudioMicMute" = volumeCmd "toggle-mute-mic";
+            "--locked XF86MonBrightnessUp" = brightnessCmd "raise";
+            "--locked XF86MonBrightnessDown" = brightnessCmd "lower";
 
-              # Screenshot
-              "${mod}+Print" = screenshotCmd "screen";
-              "${mod}+Shift+Print" = screenshotCmd "focused";
-              "${mod}+Shift+s" = screenshotCmd "copy-area";
-            } // bindingModes.keybindings
-          ); # keybindings
+            # Screenshot
+            "${mod}+Print" = screenshotCmd "screen";
+            "${mod}+Shift+Print" = screenshotCmd "focused";
+            "${mod}+Shift+s" = screenshotCmd "copy-area";
+          } // bindingModes.keybindings
+        ); # keybindings
 
         # Binding modes
         modes = lib.mkOptionDefault bindingModes.modes;
@@ -232,7 +226,8 @@ in
 
         seat = {
           "*" = {
-            "xcursor_theme" = "${cursorTheme.name} ${toString cursorTheme.size}";
+            "xcursor_theme" =
+              "${cursorTheme.name} ${toString cursorTheme.size}";
           };
         }; # seat
 
@@ -268,17 +263,6 @@ in
             command = "${pkgs.kanshi}/bin/kanshi";
             always = true;
           }
-          # FIXME: Fix or remove WOB
-          # {
-          #   command = with config.colorScheme.palette; ''
-          #     ${pkgs.coreutils}/bin/mkfifo $SWAYSOCK.wob && \
-          #     ${pkgs.coreutils}/bin/tail -f $SWAYSOCK.wob \
-          #     | ${pkgs.wob}/bin/wob \
-          #       --border-color '#${base05}ff' \
-          #       --background-color '#${base00}ff' \
-          #       --bar-color '#${base0A}ff'
-          #   '';
-          # }
           {
             command = "${pkgs.foot}/bin/foot --server";
           }
