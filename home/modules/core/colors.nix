@@ -1,4 +1,4 @@
-{ inputs, config, lib, ... }:
+{ inputs, config, ... }:
 
 let
   inherit (inputs) nix-colors;
