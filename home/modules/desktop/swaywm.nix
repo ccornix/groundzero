@@ -20,7 +20,7 @@ let
   # Utilities and scripts
   xargs = "${pkgs.findutils}/bin/xargs";
   swaymsg = "${pkgs.sway-unwrapped}/bin/swaymsg";
-  locker = "${pkgs.swaylock}/bin/swaylock -f";
+  swaylock = "${pkgs.swaylock}/bin/swaylock -f";
 
   scripts = (import ./scripts.nix { inherit pkgs; }) //
     (import ./swaywm/scripts.nix { inherit lib pkgs; });
@@ -41,12 +41,6 @@ let
   altMod = "Mod1";
 
   bindingModes = import ./swaywm/modes.nix { inherit config pkgs lib mod; };
-
-  # WORKAROUND:
-  # https://github.com/nix-community/home-manager/issues/2659
-  homeSessionVariables = ''
-    . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
-  '';
 in
 {
   options.my.desktop.swaywm = with lib; {
@@ -56,7 +50,7 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
       enable = true;
-      systemd.enable = false;
+      systemd.enable = true;
       wrapperFeatures.gtk = true;
       xwayland = true;
       extraSessionCommands = ''
@@ -65,7 +59,7 @@ in
         export _JAVA_AWT_WM_NONREPARENTING=1
         export DESKTOP_SESSION=gnome
         export SSH_AUTH_SOCK
-      '' + homeSessionVariables;
+      '';
       config = rec {
         fonts = {
           names = [ termFont.name ];
@@ -263,9 +257,6 @@ in
             command = "${pkgs.kanshi}/bin/kanshi";
             always = true;
           }
-          {
-            command = "${pkgs.foot}/bin/foot --server";
-          }
         ];
 
         assigns = {
@@ -315,7 +306,11 @@ in
         }
       ];
       events = [
-        { event = "before-sleep"; command = locker; }
+        {
+          event = "before-sleep";
+          command = "${pkgs.procps}/bin/pgrep swaylock || ${swaylock}";
+        }
+        { event = "lock"; command = swaylock; }
       ];
     };
 

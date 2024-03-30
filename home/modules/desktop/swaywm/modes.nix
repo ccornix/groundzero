@@ -3,8 +3,6 @@
 { config, pkgs, lib, mod, ... }:
 
 let
-  locker = "${pkgs.swaylock}/bin/swaylock -f";
-  sleep = "${pkgs.coreutils}/bin/sleep";
   swaymsg = "${pkgs.sway-unwrapped}/bin/swaymsg";
 
   customModes = [
@@ -15,7 +13,7 @@ let
         {
           shortcut = "l";
           label = "[l]ock";
-          cmd = locker;
+          cmd = "loginctl lock-session";
         }
         {
           shortcut = "e";
@@ -25,7 +23,7 @@ let
         {
           shortcut = "s";
           label = "[s]uspend";
-          cmd = "${locker} && ${sleep} 2 && systemctl suspend";
+          cmd = "systemctl suspend";
         }
         {
           shortcut = "r";
