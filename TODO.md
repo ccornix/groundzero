@@ -8,4 +8,4 @@
 ## Home Manager
 
 - Sync dircolors, mc colors
-- Add mc directory hotlist, custom quick menu
+- Add mc custom quick menu
