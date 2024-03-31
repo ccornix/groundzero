@@ -14,6 +14,10 @@
       # Make ipython follow terminal colors
       ipython = "ipython --colors=Linux";
     };
+    # HACK: https://github.com/nix-community/home-manager/issues/2659
+    initExtra = ''
+      . $HOME/.nix-profile/etc/profile.d/hm-session-vars.sh
+    '';
     profileExtra = ''
       mkdir -p $XDG_CACHE_HOME/bash
     '';
