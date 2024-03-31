@@ -13,11 +13,9 @@
   my = {
     desktop.enable = true;
     network = {
-      # FIXME: fill
-      # interfaces = {
-      #   wired = { wired0 = ""; };
-      #   wireless = { wireless0 = ""; };
-      # };
+      interfaces = {
+        wired = { wired0 = "4c:cc:6a:93:3c:98"; };
+      };
       shares.enable = true;
       tailscale.enable = true;
     };
