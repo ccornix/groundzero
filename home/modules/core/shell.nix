@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, ... }:
 
 {
   home.sessionVariables.FLAKE0 = config.my.flakeURI;
@@ -71,4 +71,6 @@
       container.disabled = true;
     };
   };
+
+  xdg.enable = true;
 }

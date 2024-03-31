@@ -13,19 +13,22 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = [ pkgs.imv ];
 
-    xdg.configFile."imv/config".text =
-      let
-        realpath = "${pkgs.coreutils}/bin/realpath";
-        n = "[$imv_current_index/$imv_file_count]";
-        r = "[\${imv_width}x\${imv_height}]";
-        s = "[\${imv_scale}%]";
-        p = "$(realpath --relative-to=. \"$imv_current_file\")";
-      in
-      ''
-        [options]
-        overlay = true
-        overlay_font = ${font}
-        overlay_text = ${n} ${r} ${s} ${p}
-      '';
+    xdg = {
+      enable = true;
+      configFile."imv/config".text =
+        let
+          realpath = "${pkgs.coreutils}/bin/realpath";
+          n = "[$imv_current_index/$imv_file_count]";
+          r = "[\${imv_width}x\${imv_height}]";
+          s = "[\${imv_scale}%]";
+          p = "$(${realpath} --relative-to=. \"$imv_current_file\")";
+        in
+        ''
+          [options]
+          overlay = true
+          overlay_font = ${font}
+          overlay_text = ${n} ${r} ${s} ${p}
+        '';
+    }; # xdg
   }; # config
 }

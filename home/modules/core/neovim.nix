@@ -1,8 +1,6 @@
-{ inputs, config, pkgs, lib, ... }:
+{ pkgs, lib, ... }:
 
 let
-  nix-colors-lib = inputs.nix-colors.lib-contrib { inherit pkgs; };
-
   plugins = with pkgs.vimPlugins; [
     nvim-cmp
     cmp-nvim-lsp
@@ -74,23 +72,26 @@ in
     extraLuaConfig = "require('core')";
   };
 
-  xdg.configFile = {
-    "nvim/lua/core.lua".source = ../../.config/nvim/lua/core.lua;
-    "nvim/lua/utils.lua".source = ../../.config/nvim/lua/utils.lua;
-  } // (
-    lib.filterAttrs
-      (n: v: builtins.pathExists v.source)
-      (
-        builtins.listToAttrs
-          (
-            map
-              (
-                name: lib.nameValuePair
-                  "nvim/lua/configs/${name}.lua"
-                  { source = configFilePath name; }
-              )
-              (map normalizedPname plugins)
-          )
-      )
-  );
+  xdg = {
+    enable = true;
+    configFile = {
+      "nvim/lua/core.lua".source = ../../.config/nvim/lua/core.lua;
+      "nvim/lua/utils.lua".source = ../../.config/nvim/lua/utils.lua;
+    } // (
+      lib.filterAttrs
+        (n: v: builtins.pathExists v.source)
+        (
+          builtins.listToAttrs
+            (
+              map
+                (
+                  name: lib.nameValuePair
+                    "nvim/lua/configs/${name}.lua"
+                    { source = configFilePath name; }
+                )
+                (map normalizedPname plugins)
+            )
+        )
+    );
+  };
 }

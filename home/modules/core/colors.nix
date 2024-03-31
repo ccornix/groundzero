@@ -15,5 +15,8 @@ in
     MY_BASE16_COLORSCHEME = config.colorScheme.slug;
   };
 
-  xdg.configFile."newt/colors".source = ../../.config/newt/colors;
+  xdg = {
+    enable = true;
+    configFile."newt/colors".source = ../../.config/newt/colors;
+  };
 }
