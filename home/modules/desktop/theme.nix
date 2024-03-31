@@ -156,7 +156,7 @@ in
     };
 
     fonts.fontconfig.enable = true;
-  }; # config
 
-  xdg.enable = true;
+    xdg.enable = true;
+  }; # config
 }
