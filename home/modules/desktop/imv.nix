@@ -17,11 +17,10 @@ in
       enable = true;
       configFile."imv/config".text =
         let
-          realpath = "${pkgs.coreutils}/bin/realpath";
           n = "[$imv_current_index/$imv_file_count]";
           r = "[\${imv_width}x\${imv_height}]";
           s = "[\${imv_scale}%]";
-          p = "$(${realpath} --relative-to=. \"$imv_current_file\")";
+          p = "$(realpath --relative-to=. \"$imv_current_file\")";
         in
         ''
           [options]
