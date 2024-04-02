@@ -2,11 +2,11 @@
 
 let
   hosts = [
-    "parsley"
-    "sage"
-    "rosemary"
-    "thyme"
-    "garlic"
+    "b550"
+    "c236m"
+    "hypervvm"
+    "x13"
+    "x230"
   ];
 
   mkNixosConfig = host: nixpkgs.lib.nameValuePair host (

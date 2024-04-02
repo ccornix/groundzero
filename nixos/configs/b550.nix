@@ -70,7 +70,7 @@
     };
   };
 
-  networking.hostName = "parsley";
+  networking.hostName = "b550";
 
   nixpkgs.hostPlatform = "x86_64-linux";
 

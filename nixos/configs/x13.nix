@@ -67,7 +67,7 @@
     };
   };
 
-  networking.hostName = "sage";
+  networking.hostName = "x13";
 
   nixpkgs.hostPlatform = "x86_64-linux";
 

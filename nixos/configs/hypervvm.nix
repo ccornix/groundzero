@@ -39,7 +39,7 @@
       config.hardware.enableRedistributableFirmware;
   };
 
-  networking.hostName = "garlic";
+  networking.hostName = "hypervvm";
 
   nixpkgs.hostPlatform = "x86_64-linux";
 

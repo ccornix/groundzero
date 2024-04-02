@@ -1,6 +1,6 @@
-# Custom Xeon workstation (C236)
+# ThinkPad X230 (coreboot)
 
-{ inputs, config, lib, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 {
   imports = [
@@ -14,29 +14,35 @@
     desktop.enable = true;
     network = {
       interfaces = {
-        wired = { wired0 = "4c:cc:6a:93:3c:98"; };
+        wired = { wired0 = "3c:97:0e:aa:52:ab"; };
+        wireless = { wireless0 = "00:6b:9e:01:c4:36"; };
       };
       shares.enable = true;
       tailscale.enable = true;
     };
-    virtualization = {
-      enable = true;
-      persistent = false;
-    };
+    virtualization.enable = true;
     zfs.enable = true;
   };
 
   boot = {
     initrd.availableKernelModules = [
       "ahci"
-      "nvme"
+      "ehci_pci"
       "sd_mod"
-      "usb_storage"
-      "usbhid"
+      "sdhci_pci"
+      "uas"
       "xhci_pci"
     ];
     kernelModules = [ "kvm-intel" ];
-    loader.systemd-boot.enable = true;
+    blacklistedKernelModules = [ "mei" "mei_me" ];
+
+    # Let disko set up `boot.loader.grub.devices`
+    loader.grub.enable = true;
+
+    # HACK: silence mdadm warning on missing MAILADDR or PROGRAM setting
+    swraid.mdadmConf = ''
+      PROGRAM ${pkgs.coreutils}/bin/true
+    '';
   };
 
   # neededForBoot flag is not settable from disko
@@ -57,7 +63,7 @@
     };
   };
 
-  networking.hostName = "rosemary";
+  networking.hostName = "x230";
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
@@ -67,69 +73,73 @@
 
   disko.devices = {
     disk = {
-      system = {
+      system1 = {
         type = "disk";
-        device = "/dev/disk/by-id/nvme-eui.0026b768448ad5e5";
+        device = "/dev/disk/by-id/wwn-0x57c35481a3ac4f8c";
         content = {
           type = "gpt";
           partitions = {
-            ESP = {
-              size = "512M";
-              type = "EF00";
-              content = {
-                type = "filesystem";
-                format = "vfat";
-                mountpoint = "/boot";
-                # Fix world-accessible /boot/loader/random-seed
-                # https://github.com/nix-community/disko/issues/527#issuecomment-1924076948
-                mountOptions = [ "umask=0077" ];
-              };
+            biosboot1 = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
             };
-            root = {
+            boot1 = {
+              size = "512M";
+              content = {
+                type = "mdraid";
+                name = "boot";
+              };
+            }; # boot1
+            zfs1 = {
               size = "100%";
               content = {
                 type = "zfs";
                 pool = "rpool";
               };
-            };
+            }; # zfs1
           }; # partitions
         }; # content
-      }; # system
-      vm = {
+      }; # system1
+      system2 = {
         type = "disk";
-        device = "/dev/disk/by-id/wwn-0x500a0751e67d29e6";
+        device = "/dev/disk/by-id/wwn-0x57c35481a213e4a4";
         content = {
           type = "gpt";
           partitions = {
-            vm = {
+            biosboot2 = {
+              size = "1M";
+              type = "EF02"; # for grub MBR
+            };
+            boot2 = {
+              size = "512M";
+              content = {
+                type = "mdraid";
+                name = "boot";
+              };
+            }; # boot2
+            zfs2 = {
               size = "100%";
               content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/var/lib/libvirt";
+                type = "zfs";
+                pool = "rpool";
               };
-            };
+            }; # zfs2
           }; # partitions
         }; # content
-      }; # vm
-      scratch = {
-        type = "disk";
-        device = "/dev/disk/by-id/wwn-0x500a0751e5ee2539";
-        content = {
-          type = "gpt";
-          partitions = {
-            scratch = {
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/scratch";
-              };
-            };
-          }; # partitions
-        }; # content
-      }; # scratch
+      }; # system2
     }; # disk
+    mdadm = {
+      boot = {
+        type = "mdadm";
+        level = 1;
+        metadata = "1.0";
+        content = {
+          type = "filesystem";
+          format = "ext4";
+          mountpoint = "/boot";
+        }; # content
+      }; # boot
+    }; # mdadm
     zpool = {
       rpool = {
         type = "zpool";
@@ -141,6 +151,9 @@
           relatime = "on";
           normalization = "formD";
           mountpoint = "none";
+          encryption = "aes-256-gcm";
+          keyformat = "passphrase";
+          keylocation = "prompt";
           compression = "lz4";
           "com.sun:auto-snapshot" = "false";
         };
@@ -148,7 +161,7 @@
           ashift = "12";
           autotrim = "on";
         };
-
+        mode = "mirror";
         datasets = {
           local = {
             type = "zfs_fs";
