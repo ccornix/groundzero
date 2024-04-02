@@ -12,10 +12,9 @@
 
   my = {
     network = {
-      interfaces = {
-        # FIXME: disable temporarily to investigate network issue
-        # wired = { wired0 = "00:15:5d:78:91:00"; };
-      };
+      # Keep config free of unique hardware IDs, therefore, do not define
+      # custom interfaces
+      interfaces = { };
       shares.enable = true;
       tailscale.enable = true;
     };
