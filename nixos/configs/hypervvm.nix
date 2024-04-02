@@ -13,7 +13,8 @@
   my = {
     network = {
       interfaces = {
-        wired = { wired0 = "00:15:5d:78:91:00"; };
+        # FIXME: disable temporarily to investigate network issue
+        # wired = { wired0 = "00:15:5d:78:91:00"; };
       };
       shares.enable = true;
       tailscale.enable = true;
