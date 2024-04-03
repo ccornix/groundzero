@@ -1,9 +1,8 @@
 { inputs, config, pkgs, ... }:
 
 let
-  inherit (inputs) wallpapers;
   inherit (pkgs.stdenv.hostPlatform) system;
-  wallpaperPkg = wallpapers.packages.${system}.kochflakes3.override {
+  wallpaperPkg = inputs.wallpapers.packages.${system}.gosperflakes2.override {
     palette = builtins.attrValues config.colorScheme.palette;
     width = config.my.primaryDisplayResolution.horizontal;
   };
