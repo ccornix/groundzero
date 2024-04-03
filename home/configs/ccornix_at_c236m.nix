@@ -1,4 +1,4 @@
-{ inputs, pkgs, lib, ... }:
+{ inputs, ... }:
 
 {
   imports = [ inputs.self.homeModules.default ./ccornix.nix ];
