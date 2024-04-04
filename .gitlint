@@ -13,7 +13,7 @@ regex-style-search=True
 ### Configuring rules ###
 
 [title-max-length]
-line-length=80
+line-length=100
 
 [title-min-length]
 min-length=5

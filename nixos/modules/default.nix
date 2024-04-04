@@ -12,7 +12,7 @@
 
   options.my.flakeURI = lib.mkOption {
     type = lib.types.nonEmptyStr;
-    default = "github:ccornix/groundzero";
+    default = "github:aolasz/groundzero";
     description = ''
       URI of the NixOS configuration flake. Can be set to point to a local
       repository, too.
