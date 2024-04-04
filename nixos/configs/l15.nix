@@ -40,7 +40,7 @@
         "sdhci_pci"
         "thunderbolt"
         "usb_storage"
-        "usbhid
+        "usbhid"
         "xhci_pci"
       ];
       kernelModules = [ "i915" ];
