@@ -35,11 +35,13 @@
     initrd = {
       availableKernelModules = [
         "nvme"
-        "ehci_pci"
-        "xhci_pci"
-        "usb_storage"
-        "sd_mod"
         "rtsx_pci_sdmmc"
+        "sd_mod"
+        "sdhci_pci"
+        "thunderbolt"
+        "usb_storage"
+        "usbhid
+        "xhci_pci"
       ];
       kernelModules = [ "i915" ];
     };
