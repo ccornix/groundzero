@@ -43,7 +43,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
     - If you have access to a system where Nix is installed, it is preferred to build the ISO image for yourself as
 
         ```sh
-        nix --experimental-features 'nix-command flakes' build github:ccornix/groundzero#iso
+        nix --experimental-features 'nix-command flakes' build github:aolasz/groundzero#iso
         ```
 
       The resulting ISO image is then located at `./result/iso/nixos.iso`. This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system.
@@ -58,7 +58,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
 
     ```sh
     export NIX_CONFIG='experimental-features = nix-command flakes'
-    export FLAKE0=github:ccornix/groundzero
+    export FLAKE0=github:aolasz/groundzero
     ```
 
 5. Enter a host-specific installer devshell of this flake as follows
@@ -103,7 +103,7 @@ That's all! :sunglasses:
    In addition, set the `FLAKE0` environment variable as
 
     ```sh
-    export FLAKE0=github:ccornix/groundzero
+    export FLAKE0=github:aolasz/groundzero
     ```
 
 1. Run the following[^hmpkg] as the target user
@@ -121,7 +121,7 @@ That's all! :sunglasses:
 1. Since the HM configuration redefines the `FLAKE0` variable to point to a directory inside the home directory of the user, ensure that this flake is cloned there:
 
    ```sh
-   nix flake clone --dest $FLAKE0 github:ccornix/groundzero
+   nix flake clone --dest $FLAKE0 github:aolasz/groundzero
    ```
 
 2. Within the local repo directory, install a `gitlint` commit-msg hook to ensure that future commit messages adhere to the [Conventional Commits][conventional-commits] specification:
