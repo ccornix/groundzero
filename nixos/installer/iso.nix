@@ -2,6 +2,9 @@
 
 { inputs, pkgs, lib, modulesPath, ... }:
 
+let
+  inherit (pkgs.stdenv.hostPlatform) system;
+in
 {
   imports = [ "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix" ];
 
@@ -27,7 +30,7 @@
   users.users.nixos.password = "nixos";
 
   isoImage = {
-    isoName = lib.mkForce "nixos.iso";
+    isoName = lib.mkForce "nixos-${system}.iso";
     # Reduce compression
     # https://github.com/NixOS/nixpkgs/blob/50f9b3107a09ed35bbf3f9ab36ad2683619debd2/nixos/lib/make-squashfs.nix#L8Compression
     squashfsCompression = "zstd -Xcompression-level 6";

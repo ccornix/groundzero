@@ -28,7 +28,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
     - Download the latest NixOS ISO image using
 
         ```sh
-        wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
+        wget -O nixos-x86_64-linux.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
         ```
 
       write it onto some external medium and boot it.
@@ -46,7 +46,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
         nix --experimental-features 'nix-command flakes' build github:ccornix/groundzero#iso
         ```
 
-      The resulting ISO image is then located at `./result/iso/nixos.iso`. This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system.
+      The resulting ISO image is then located at `./result/iso/nixos-x86_64-linux.iso`. This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system.
 
     - Otherwise just use the latest minimal NixOS ISO image.
 
