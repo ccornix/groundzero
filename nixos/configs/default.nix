@@ -5,7 +5,6 @@ let
     "b550"
     "c236m"
     "hypervvm"
-    "rpi4"
     "x13"
     "x230"
   ];
