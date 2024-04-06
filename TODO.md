@@ -2,8 +2,10 @@
 
 ## NixOS
 
+- Revise installation instructions to correctly distinguish between architectures
+
 ## Home Manager
 
-- Sometimes session variables are not set :-o
+- Remove `nix flake clone`, suggest SSH-based `git clone` instead
 - Sync dircolors, mc colors
 - Add mc custom quick menu
