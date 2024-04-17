@@ -89,7 +89,7 @@ That's all! :sunglasses:
 
 ### Home Manager
 
-#### Preparatory steps (non-NixOS Linux distros only!)
+#### Preparatory steps (on non-NixOS Linux systems only!)
 
 1. Set up `nix.conf`:
 
@@ -135,9 +135,7 @@ nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
 
 [^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by `flake.lock`) so that the one performing the setup would be the same as the one used afterward.
 
-#### Rootless mode
-
-This remarks apply only if Nix has been installed in rootless mode. Rootless HM setup has been tested under Debian GNU/Linux 12.
+#### Rootless mode (for rootless Nix installation on non-NixOS systems only!)
 
 After setting up HM, the user's HM environment needs to be activated explicitly (on each login) as
 ```sh
@@ -146,6 +144,8 @@ After setting up HM, the user's HM environment needs to be activated explicitly 
 This command creates a chroot-environment inside which all the symlinks into `/nix/store` within the home directory become valid.
 
 Note that in the HM config itself, `$HOME/.nix-profile/bin` must be prepended to the existing `PATH` variable so that all commands enabled in the HM config become accessible!
+
+Rootless HM setup has been tested under Debian GNU/Linux 12.
 
 *TODO*: Since `.profile`, `.bash_profile`, and `.bashrc` are all symlinks to into `/nix/store` (that is inaccessible right after login), is there any way to avoid that manual activation with user privileges only (without switching to a different shell (e.g. `zsh`) in the HM environment)?
 
