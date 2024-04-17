@@ -6,7 +6,7 @@
 
 ## Home Manager
 
-- Polish rootless HM environment
+- Fix rootless HM environment, continue trying `nix-portable`
 - Fix SSH_AUTH_SOCK for rootless HM environments
 - Convert as many config files as feasible to '.nix' files, mainly Neovim!
 - Sync dircolors, mc colors
