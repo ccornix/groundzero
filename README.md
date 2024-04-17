@@ -89,39 +89,107 @@ That's all! :sunglasses:
 
 ### Home Manager
 
-0. (If running Nix on an alien Linux distro) Set up `nix.conf`:
+#### Preparatory steps (non-NixOS Linux distros only!)
+
+1. Set up `nix.conf`:
 
     ```sh
-    nixconf=${XDG_CONFIG_HOME:-$HOME/.config}/nix/nix.conf
-    mkdir -p $(dirname $nixconf)
-    echo 'experimental-features = nix-command flakes' >> $nixconf
-    echo 'commit-lockfile-summary = chore: update flake.lock' >> $nixconf
+    NIXCONF="${XDG_CONFIG_HOME:-$HOME/.config}/nix/nix.conf"
+    mkdir -p $(dirname $NIXCONF)
+    echo 'experimental-features = nix-command flakes' >> $NIXCONF
+    echo 'commit-lockfile-summary = chore: update flake.lock' >> $NIXCONF
     ```
 
    The last `nix.conf` setting makes automatic lockfile commits follow the [Conventional Commits][conventional-commits] specification.
 
-   In addition, set the `FLAKE0` environment variable as
+2. In addition, set the `FLAKE0` environment variable as
 
     ```sh
     export FLAKE0=github:ccornix/groundzero
     ```
 
-1. Run the following[^hmpkg] as the target user
+3. Install Nix (it is expected that `curl` is available)
 
-   ```sh
-   nix run $FLAKE0#home-manager -- switch --flake $FLAKE0
-   ```
+    a. If the user has `sudo` rights, perform the [official installation procedure][nix-installation].
+
+    b. For an entirely rootless installation, download the static version of Nix (inspired by [`hurricanehrndz`'s post][hurricanehrndz]):
+
+       ```sh
+       BIN="$HOME/.local/bin"
+       mkdir -p $BIN
+       curl -o $BIN/nix -L https://hydra.nixos.org/job/nix/master/buildStatic.x86_64-linux/latest/download/1
+       chmod +x $BIN/nix
+       export PATH="$PATH:$BIN"
+       ```
+
+#### Home Manager setup
+
+##### Normal mode (Nix store at `/nix/store`)
+
+Perform this procedure if the Nix store is located at `/nix/store`.
+
+Run the following[^hmpkg] as the target user
+
+```sh
+nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
+```
 
 [^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by `flake.lock`) so that the one performing the setup would be the same as the one used afterward.
 
+##### Rootless mode
+
+:wrench: Experimental feature under construction! :wrench:
+
+Perform this procedure if you performed a rootless Nix installation because the
+current user does not have permissions to create a store in `/nix/store`. It is
+assumed that `curl` is available.
+
+This procedure has been tested under Debian GNU/Linux 12.
+
+HM activation requires that all stable Nix commands are available (such as `nix-build` or `nix-instantiate`). Therefore, we enter a Nix shell that readily provides these and the desired version of Nix:
+
+```sh
+nix shell nixpkgs#nixVersions.nix_2_19 --command bash --noprofile --norc -l
+```
+
+Unfortunately, the normal mode setup of HM inside this shell results in the
+following error:
+```
+error: setting up a private mount namespace: Operation not permitted
+```
+
+Therefore, the HM configuration needs to be build and activated manually as follows. It is assumed here that the `activationPackage` of the HM configuration is provided as a package by flake `groundzero`, named `<user>@<hostname>`. Setting the `HOME_MANAGER_BACKUP_EXT` environment variable is [equivalent][hm-backup-ext] to using the `-b` option of the `home-manager` tool.
+
+```sh
+cd /tmp
+nix build $FLAKE0#$USER@$HOSTNAME
+export HOME_MANAGER_BACKUP_EXT=old
+./result/bin/home-manager-generation
+exit
+```
+
+Henceforth, the user's HM environment needs to be activated explicitly as
+```sh
+~/.local/bin/nix run nixpkgs#bashInteractive
+```
+This command creates a chroot-environment inside which all the symlinks into `/nix/store` within the home directory become valid.
+
+Note that in the HM config itself, `$HOME/.nix-profile/bin` must be prepended to the existing `PATH` variable so that all commands enabled in the HM config become accessible!
+
+*TODO*: Since `.profile`, `.bash_profile`, and `.bashrc` are all symlinks to into `/nix/store` (that is inaccessible right after login), is there any way to avoid that manual activation with user privileges only (without switching to a different shell (e.g. `zsh`) in the HM environment)?
+
+*TODO*: Consider setting `home.emptyActivationPath` to `false` and create the
+stable Nix symlinks manually in `~/.local/bin` and entering the extra Nix
+shell. In that case, ensure that static Nix is always used.
+
 ## Post-install tasks and development
 
-0. Generate SSH keys for the user of the fresh installation and register the public key where needed.
+0. Generate SSH keys for the user of the fresh installation and register the public key where needed or rely on SSH agent forwarding (*FIXME*: not yet working with rootless HM environment, maybe because `SSH_AUTH_SOCK` is redefined in the inner HM shell).
 
 1. Since the HM configuration redefines the `FLAKE0` variable to point to a directory inside the home directory of the user, ensure that this flake is cloned there:
 
    ```sh
-   nix flake clone --dest $FLAKE0 github:ccornix/groundzero
+   git clone git@github.com:ccornix/groundzero $FLAKE0
    ```
 
 2. Within the local repo directory, install a `gitlint` commit-msg hook to ensure that future commit messages adhere to the [Conventional Commits][conventional-commits] specification:
@@ -212,3 +280,6 @@ In addition, this flake stands on the shoulders of other flake-giants, explicitl
 [dasj-dotfiles]: https://github.com/dasj/dotfiles
 [installation-networking]: https://nixos.org/manual/nixos/stable/#sec-installation-manual
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
+[nix-installation]: https://nixos.org/download/#nix-install-linux
+[hurricanehrndz]: https://github.com/nix-community/home-manager/issues/3752#issuecomment-1566179742
+[hm-backup-ext]: https://github.com/nix-community/home-manager/blob/fa8c16e2452bf092ac76f09ee1fb1e9f7d0796e7/modules/files.nix#L134
