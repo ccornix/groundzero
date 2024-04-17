@@ -117,16 +117,15 @@ That's all! :sunglasses:
     ```sh
     BIN="$HOME/.local/bin"
     mkdir -p $BIN
-    curl -o $BIN/nix -L https://hydra.nixos.org/job/nix/master/buildStatic.x86_64-linux/latest/download/1
-    chmod +x $BIN/nix
+    cd $BIN
+    curl -o nix -L https://hydra.nixos.org/job/nix/master/buildStatic.x86_64-linux/latest/download/1
+    chmod +x nix
+    SUFFIXES='build channel collect-garbage copy-closure daemon env hash instantiate prefetch-url shell store'
+    for suffix in $SUFFIXES; do ln -s nix nix-$suffix; done
     export PATH="$PATH:$BIN"
     ```
 
 #### Home Manager setup
-
-##### Normal mode (Nix store at `/nix/store`)
-
-Perform this procedure if the Nix store is located at `/nix/store`.
 
 Run the following[^hmpkg] as the target user
 
@@ -136,36 +135,11 @@ nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
 
 [^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by `flake.lock`) so that the one performing the setup would be the same as the one used afterward.
 
-##### Rootless mode
+#### Rootless mode
 
-:wrench: Experimental feature under construction! :wrench:
+This remarks apply only if Nix has been installed in rootless mode. Rootless HM setup has been tested under Debian GNU/Linux 12.
 
-Perform this procedure if you performed a rootless Nix installation because the
-current user does not have permissions to create a store in `/nix/store`. The procedure has been tested under Debian GNU/Linux 12.
-
-HM activation requires that all stable Nix commands are available (such as `nix-build` or `nix-instantiate`). Therefore, we enter a Nix shell that readily provides these and the desired version of Nix:
-
-```sh
-nix shell nixpkgs#nixVersions.nix_2_19 --command bash --noprofile --norc -l
-```
-
-Unfortunately, the normal mode setup of HM inside this shell results in the
-following error:
-```
-error: setting up a private mount namespace: Operation not permitted
-```
-
-Therefore, the HM configuration needs to be build and activated manually as follows. It is assumed here that the `activationPackage` of the HM configuration is provided as a package by flake `groundzero`, named `<user>@<hostname>`. Setting the `HOME_MANAGER_BACKUP_EXT` environment variable is [equivalent][hm-backup-ext] to using the `-b` option of the `home-manager` tool.
-
-```sh
-cd /tmp
-nix build $FLAKE0#$USER@$HOSTNAME
-export HOME_MANAGER_BACKUP_EXT=old
-./result/bin/home-manager-generation
-exit
-```
-
-Henceforth, the user's HM environment needs to be activated explicitly as
+After setting up HM, the user's HM environment needs to be activated explicitly (on each login) as
 ```sh
 ~/.local/bin/nix run nixpkgs#bashInteractive
 ```
@@ -174,10 +148,6 @@ This command creates a chroot-environment inside which all the symlinks into `/n
 Note that in the HM config itself, `$HOME/.nix-profile/bin` must be prepended to the existing `PATH` variable so that all commands enabled in the HM config become accessible!
 
 *TODO*: Since `.profile`, `.bash_profile`, and `.bashrc` are all symlinks to into `/nix/store` (that is inaccessible right after login), is there any way to avoid that manual activation with user privileges only (without switching to a different shell (e.g. `zsh`) in the HM environment)?
-
-*TODO*: Consider setting `home.emptyActivationPath` to `false` and create the
-stable Nix symlinks manually in `~/.local/bin` and entering the extra Nix
-shell. In that case, ensure that static Nix is always used.
 
 ## Post-install tasks and development
 
