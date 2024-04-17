@@ -1,4 +1,4 @@
-{ ... }:
+{ lib, ... }:
 
 {
   programs = {
@@ -14,7 +14,7 @@
 
     keychain = {
       enable = true;
-      keys = [ "id_ed25519" ];
+      keys = lib.mkDefault [ "id_ed25519" ];
     };
   };
 }
