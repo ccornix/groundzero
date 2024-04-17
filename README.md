@@ -112,19 +112,18 @@ That's all! :sunglasses:
 
     a. If the user has `sudo` rights, perform the [official installation procedure][nix-installation].
 
-    b. For an entirely rootless installation, download the static version of Nix (inspired by [`hurricanehrndz`'s post][hurricanehrndz]):
-
-    :warning: **Experimental feature!** :warning:
+    b. For an entirely rootless installation, the most convenient method is to use [`nix-portable`][nix-portable]:
 
     ```sh
-    BIN="$HOME/.local/bin"
-    mkdir -p $BIN
-    cd $BIN
-    curl -o nix -L https://hydra.nixos.org/job/nix/master/buildStatic.x86_64-linux/latest/download/1
-    chmod +x nix
-    SUFFIXES='build channel collect-garbage copy-closure daemon env hash instantiate prefetch-url shell store'
-    for suffix in $SUFFIXES; do ln -s nix nix-$suffix; done
-    export PATH="$PATH:$BIN"
+    mkdir -p ~/.local/bin && cd ~/.local/bin
+    curl -o nix-portable -L https://github.com/DavHau/nix-portable/releases/latest/download/nix-portable-$(uname -m)
+    chmod +x nix-portable
+    ```
+
+    Enter a Nix shell to proceed with HM setup:
+
+    ```sh
+    NP_RUNTIME=bwrap ./nix-portable nix shell nixpkgs#{bashInteractive,nix}
     ```
 
 #### Home Manager setup
@@ -137,27 +136,25 @@ nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
 
 [^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by `flake.lock`) so that the one performing the setup would be the same as the one used afterward.
 
-#### Rootless mode (for rootless Nix installation on non-NixOS systems only!)
+#### Rootless mode using `nix-portable` (on non-NixOS systems only!)
 
-:warning: **Experimental feature!** :warning:
-
-After setting up HM, the user's HM environment needs to be activated explicitly (on each login) as
+After setting up HM, the user's HM environment needs to be activated explicitly. It is useful to create a script for it:
 ```sh
-~/.local/bin/nix run nixpkgs#bashInteractive --offline
+echo '#!/usr/bin/env bash' >> ~/.local/bin/hm-env
+echo 'NP_RUNTIME=bwrap $HOME/.local/bin/nix-portable nix run nixpkgs#bashInteractive --offline' >> ~/.local/bin/hm-env
+chmod +x ~/.local/bin/hm-env
 ```
-This command creates a chroot-environment inside which all the symlinks into `/nix/store` within the home directory become valid.
-Via SSH, the HM environment can be accessed quickly as
+
+With help of this script, the HM environment can be activate locally as
 ```sh
-ssh -t <address> '.local/bin/nix run nixpkgs#bashInteractive --offline'
+~/.local/bin/hm-env
+```
+or over SSH as
+```sh
+ssh -t <address> .local/bin/hm-env
 ```
 
 Note that in the HM config itself, `$HOME/.nix-profile/bin` must be prepended to the existing `PATH` variable so that all commands enabled in the HM config become accessible!
-
-Unfortunately, since `~/.local/bin/nix run nixpkgs#bashInteractive` had already switched to a new namespace, `nix develop` and `nix shell` might not be able, resulting in the error
-```
-error: setting up a private mount namespace: Operation not permitted
-```
-*TODO*: Test [`nix-portable`](https://github.com/DavHau/nix-portable) with `proot`?
 
 Rootless HM setup has been tested under Debian GNU/Linux 12.
 
@@ -262,5 +259,4 @@ In addition, this flake stands on the shoulders of other flake-giants, explicitl
 [installation-networking]: https://nixos.org/manual/nixos/stable/#sec-installation-manual
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
 [nix-installation]: https://nixos.org/download/#nix-install-linux
-[hurricanehrndz]: https://github.com/nix-community/home-manager/issues/3752#issuecomment-1566179742
-[hm-backup-ext]: https://github.com/nix-community/home-manager/blob/fa8c16e2452bf092ac76f09ee1fb1e9f7d0796e7/modules/files.nix#L134
+[nix-portable]: https://github.com/DavHau/nix-portable
