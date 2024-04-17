@@ -141,10 +141,7 @@ nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
 :wrench: Experimental feature under construction! :wrench:
 
 Perform this procedure if you performed a rootless Nix installation because the
-current user does not have permissions to create a store in `/nix/store`. It is
-assumed that `curl` is available.
-
-This procedure has been tested under Debian GNU/Linux 12.
+current user does not have permissions to create a store in `/nix/store`. The procedure has been tested under Debian GNU/Linux 12.
 
 HM activation requires that all stable Nix commands are available (such as `nix-build` or `nix-instantiate`). Therefore, we enter a Nix shell that readily provides these and the desired version of Nix:
 
