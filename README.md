@@ -114,6 +114,8 @@ That's all! :sunglasses:
 
     b. For an entirely rootless installation, download the static version of Nix (inspired by [`hurricanehrndz`'s post][hurricanehrndz]):
 
+    :warning: **Experimental feature!** :warning:
+
     ```sh
     BIN="$HOME/.local/bin"
     mkdir -p $BIN
@@ -137,13 +139,25 @@ nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
 
 #### Rootless mode (for rootless Nix installation on non-NixOS systems only!)
 
+:warning: **Experimental feature!** :warning:
+
 After setting up HM, the user's HM environment needs to be activated explicitly (on each login) as
 ```sh
-~/.local/bin/nix run nixpkgs#bashInteractive
+~/.local/bin/nix run nixpkgs#bashInteractive --offline
 ```
 This command creates a chroot-environment inside which all the symlinks into `/nix/store` within the home directory become valid.
+Via SSH, the HM environment can be accessed quickly as
+```sh
+ssh -t <address> '.local/bin/nix run nixpkgs#bashInteractive --offline'
+```
 
 Note that in the HM config itself, `$HOME/.nix-profile/bin` must be prepended to the existing `PATH` variable so that all commands enabled in the HM config become accessible!
+
+Unfortunately, since `~/.local/bin/nix run nixpkgs#bashInteractive` had already switched to a new namespace, `nix develop` and `nix shell` might not be able, resulting in the error
+```
+error: setting up a private mount namespace: Operation not permitted
+```
+*TODO*: Test [`nix-portable`](https://github.com/DavHau/nix-portable) with `proot`?
 
 Rootless HM setup has been tested under Debian GNU/Linux 12.
 
