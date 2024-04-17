@@ -9,7 +9,11 @@
 
   home = {
     packages = [ config.nix.package ];
-    sessionPath = [ "$HOME/.nix-profile/bin" ];
+    sessionVariables = {
+      # Prepend to PATH to take precedence over native paths
+      PATH = "$HOME/.nix-profile/bin:$PATH";
+    };
+    # sessionPath = [ "$HOME/.nix-profile/bin" ];
     stateVersion = "23.11";
   };
 
