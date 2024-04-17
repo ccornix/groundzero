@@ -114,13 +114,13 @@ That's all! :sunglasses:
 
     b. For an entirely rootless installation, download the static version of Nix (inspired by [`hurricanehrndz`'s post][hurricanehrndz]):
 
-       ```sh
-       BIN="$HOME/.local/bin"
-       mkdir -p $BIN
-       curl -o $BIN/nix -L https://hydra.nixos.org/job/nix/master/buildStatic.x86_64-linux/latest/download/1
-       chmod +x $BIN/nix
-       export PATH="$PATH:$BIN"
-       ```
+    ```sh
+    BIN="$HOME/.local/bin"
+    mkdir -p $BIN
+    curl -o $BIN/nix -L https://hydra.nixos.org/job/nix/master/buildStatic.x86_64-linux/latest/download/1
+    chmod +x $BIN/nix
+    export PATH="$PATH:$BIN"
+    ```
 
 #### Home Manager setup
 
