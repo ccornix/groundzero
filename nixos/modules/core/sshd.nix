@@ -4,6 +4,7 @@
   services.openssh = {
     enable = true;
     settings = {
+      X11Forwarding = true;
       PermitRootLogin = lib.mkForce "no";
       PasswordAuthentication = lib.mkForce false;
       KbdInteractiveAuthentication = lib.mkForce false;

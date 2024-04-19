@@ -28,7 +28,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
     - Download the latest NixOS ISO image using
 
         ```sh
-        wget -O nixos.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
+        wget -O nixos-x86_64-linux.iso https://channels.nixos.org/nixos-unstable/latest-nixos-minimal-x86_64-linux.iso
         ```
 
       write it onto some external medium and boot it.
@@ -46,7 +46,7 @@ Tip: to boot ISO images from a USB key or external SSD, my preferred method is t
         nix --experimental-features 'nix-command flakes' build github:aolasz/groundzero#iso
         ```
 
-      The resulting ISO image is then located at `./result/iso/nixos.iso`. This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system.
+      The resulting ISO image is then located at `./result/iso/nixos-x86_64-linux.iso`. This way, you ensure that the Linux kernel, ZFS kernel module, file system tools etc. of the installer are identical to those of the installed system.
 
     - Otherwise just use the latest minimal NixOS ISO image.
 
@@ -89,39 +89,85 @@ That's all! :sunglasses:
 
 ### Home Manager
 
-0. (If running Nix on an alien Linux distro) Set up `nix.conf`:
+#### Preparatory steps (on non-NixOS Linux systems only!)
+
+1. Set up `nix.conf`:
 
     ```sh
-    nixconf=${XDG_CONFIG_HOME:-$HOME/.config}/nix/nix.conf
-    mkdir -p $(dirname $nixconf)
-    echo 'experimental-features = nix-command flakes' >> $nixconf
-    echo 'commit-lockfile-summary = chore: update flake.lock' >> $nixconf
+    NIXCONF="${XDG_CONFIG_HOME:-$HOME/.config}/nix/nix.conf"
+    mkdir -p $(dirname $NIXCONF)
+    echo 'experimental-features = nix-command flakes' >> $NIXCONF
+    echo 'commit-lockfile-summary = chore: update flake.lock' >> $NIXCONF
     ```
 
    The last `nix.conf` setting makes automatic lockfile commits follow the [Conventional Commits][conventional-commits] specification.
 
-   In addition, set the `FLAKE0` environment variable as
+2. In addition, set the `FLAKE0` environment variable as
 
     ```sh
     export FLAKE0=github:aolasz/groundzero
     ```
 
-1. Run the following[^hmpkg] as the target user
+3. Install Nix (it is expected that `curl` is available)
 
-   ```sh
-   nix run $FLAKE0#home-manager -- switch --flake $FLAKE0
-   ```
+    a. If the user has `sudo` rights, perform the [official installation procedure][nix-installation].
+
+    b. For an entirely rootless installation, the most convenient method is to use [`nix-portable`][nix-portable]:
+
+    ```sh
+    mkdir -p ~/.local/bin && cd ~/.local/bin
+    curl -o nix-portable -L https://github.com/DavHau/nix-portable/releases/latest/download/nix-portable-$(uname -m)
+    chmod +x nix-portable
+    ```
+
+    Enter a Nix shell to proceed with HM setup:
+
+    ```sh
+    NP_RUNTIME=bwrap ./nix-portable nix shell nixpkgs#{bashInteractive,nix}
+    ```
+
+#### Home Manager setup
+
+Run the following[^hmpkg] as the target user
+
+```sh
+nix run $FLAKE0#home-manager -- switch -b old --flake $FLAKE0
+```
 
 [^hmpkg]: This flake exposes a frozen `home-manager` package (as dictated by `flake.lock`) so that the one performing the setup would be the same as the one used afterward.
 
+#### Rootless mode using `nix-portable` (on non-NixOS systems only!)
+
+After setting up HM, the user's HM environment needs to be activated explicitly. It is useful to create a script for it:
+```sh
+echo '#!/usr/bin/env bash' >> ~/.local/bin/hm-env
+echo 'NP_RUNTIME=bwrap $HOME/.local/bin/nix-portable nix run nixpkgs#bashInteractive --offline' >> ~/.local/bin/hm-env
+chmod +x ~/.local/bin/hm-env
+```
+
+With help of this script, the HM environment can be activate locally as
+```sh
+~/.local/bin/hm-env
+```
+or over SSH as
+```sh
+ssh -t <address> .local/bin/hm-env
+```
+
+Note that in the HM config itself, `$HOME/.nix-profile/bin` must be prepended to the existing `PATH` variable so that all commands enabled in the HM config become accessible!
+
+Rootless HM setup has been tested under Debian GNU/Linux 12.
+
+*TODO*: Since `.profile`, `.bash_profile`, and `.bashrc` are all symlinks to into `/nix/store` (that is inaccessible right after login), is there any way to avoid that manual activation with user privileges only (without switching to a different shell (e.g. `zsh`) in the HM environment)?
+
 ## Post-install tasks and development
 
-0. Generate SSH keys for the user of the fresh installation and register the public key where needed.
+0. Generate SSH keys for the user of the fresh installation and register the public key where needed or rely on SSH agent forwarding (*FIXME*: not yet working with rootless HM environment, maybe because `SSH_AUTH_SOCK` is redefined in the inner HM shell).
 
 1. Since the HM configuration redefines the `FLAKE0` variable to point to a directory inside the home directory of the user, ensure that this flake is cloned there:
 
    ```sh
-   nix flake clone --dest $FLAKE0 github:aolasz/groundzero
+   git clone git@github.com:aolasz/groundzero $FLAKE0
    ```
 
 2. Within the local repo directory, install a `gitlint` commit-msg hook to ensure that future commit messages adhere to the [Conventional Commits][conventional-commits] specification:
@@ -212,3 +258,5 @@ In addition, this flake stands on the shoulders of other flake-giants, explicitl
 [dasj-dotfiles]: https://github.com/dasj/dotfiles
 [installation-networking]: https://nixos.org/manual/nixos/stable/#sec-installation-manual
 [conventional-commits]: https://www.conventionalcommits.org/en/v1.0.0/
+[nix-installation]: https://nixos.org/download/#nix-install-linux
+[nix-portable]: https://github.com/DavHau/nix-portable

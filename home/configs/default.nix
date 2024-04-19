@@ -8,11 +8,11 @@ let
       (host: config: { user = "hapi"; inherit host; inherit (config) pkgs; })
       self.nixosConfigurations
   ) ++ [
-    # {
-    #   user = "ccornix";
-    #   host = "unmanaged";
-    #   pkgs = nixpkgs.legacyPackages.x86_64-linux;
-    # }
+    {
+      user = "ccornix";
+      host = "debian";
+      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+    }
   ];
 
   mkHomeConfig = { user, host, pkgs }: lib.nameValuePair "${user}@${host}" (
