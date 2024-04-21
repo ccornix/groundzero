@@ -202,6 +202,11 @@ Below is a table of commands for common management tasks, where environment vari
 
 [^repodir]: To be executed within the repo directory.
 
+## Additional information
+
+On customizing [Newt](https://pagure.io/newt) colors, see
+[here](./docs/newt.md).
+
 ## Troubleshooting
 
 ### Installation
