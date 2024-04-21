@@ -1,18 +1,21 @@
 { config, pkgs, ... }:
 
 let
-  inherit (config.home) username;
+  hotlistDirs = [
+    "/"
+    config.home.homeDirectory
+    config.xdg.dataHome
+    "/run/media/${config.home.username}" # TODO: is there a canonical repr?
+    "/nfs/nas"
+  ];
 in
 {
   xdg = {
     enable = true;
     configFile = {
-      "mc/hotlist".text = ''
-        ENTRY "/" URL "/"
-        ENTRY "/home/${username}" URL "/home/${username}"
-        ENTRY "/run/media/${username}" URL "/run/media/${username}"
-        ENTRY "/nfs/nas" URL "/nfs/nas"
-      '';
+      "mc/hotlist".text = builtins.concatStringsSep "\n" (
+        map (x: ''ENTRY "${x}" URL "${x}"'') hotlistDirs
+      );
     };
   };
 
