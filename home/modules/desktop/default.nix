@@ -11,10 +11,13 @@ in
     ./theme.nix
     ./i3status-rust.nix
     ./imv.nix
+    ./inkscape.nix
+    ./libreoffice.nix
     ./mako.nix
     ./mpv.nix
     ./swaylock.nix
     ./swaywm.nix
+    ./zathura.nix
   ];
 
   options.my.desktop = with lib; {
@@ -23,16 +26,19 @@ in
 
   config.my.desktop = lib.mkIf cfg.enable {
     # Required modules
-    bemenu.enable = lib.mkForce true;
-    foot.enable = lib.mkForce true;
-    generic.enable = lib.mkForce true;
-    theme.enable = lib.mkForce true;
-    i3statusRust.enable = lib.mkForce true;
-    mako.enable = lib.mkForce true;
-    swaylock.enable = lib.mkForce true;
-    swaywm.enable = lib.mkForce true;
+    bemenu.enable = true;
+    foot.enable = true;
+    generic.enable = true;
+    theme.enable = true;
+    i3statusRust.enable = true;
+    mako.enable = true;
+    swaylock.enable = true;
+    swaywm.enable = true;
     # Optional modules (opt-out)
     imv.enable = lib.mkDefault true;
+    inkscape.enable = lib.mkDefault true;
+    libreOffice.enable = lib.mkDefault true;
     mpv.enable = lib.mkDefault true;
+    zathura.enable = lib.mkDefault true;
   };
 }
