@@ -8,7 +8,6 @@ in
     ./bemenu.nix
     ./foot.nix
     ./generic.nix
-    ./theme.nix
     ./i3status-rust.nix
     ./imv.nix
     ./inkscape.nix
@@ -17,6 +16,7 @@ in
     ./mpv.nix
     ./swaylock.nix
     ./swaywm.nix
+    ./theme.nix
     ./zathura.nix
   ];
 
