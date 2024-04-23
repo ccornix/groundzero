@@ -17,7 +17,8 @@ in
         enable = true;
         defaultApplications = lib.genAttrs [
           "application/pdf" # .pdf
-          "application/postscript" # .ps
+          "application/postscript" # .ps .eps .ai
+          "image/x-eps" # .eps
           "image/vnd.djvu" # .djvu
         ] (_: [ "org.pwmt.zathura.desktop" ]);
       }; # mimeApps

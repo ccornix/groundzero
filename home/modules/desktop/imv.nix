@@ -30,7 +30,7 @@ in
         '';
       mimeApps = {
         enable = true;
-        # Adapted from:
+        # Based on:
         # https://git.sr.ht/~exec64/imv/blob/v4.5.0/files/imv.desktop
         defaultApplications = lib.genAttrs [
           "image/bmp" # .bmp

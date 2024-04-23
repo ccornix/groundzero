@@ -15,7 +15,7 @@ in
       enable = true;
       mimeApps = {
         enable = true;
-        # Adapted from:
+        # Based on:
         # https://git.libreoffice.org/core/+/refs/tags/libreoffice-24.2.3.1/sysui/desktop/menus/
         # https://git.libreoffice.org/core/+/refs/tags/libreoffice-24.2.3.1/sysui/desktop/mimetypes/
         defaultApplications = (
@@ -70,9 +70,11 @@ in
             "application/vnd.visio" # .vsd
             "application/vnd.corel-draw" # .cdr
             "application/vnd.ms-publisher" # .pub
-            "application/pdf" # .pdf
+            # "application/pdf" # .pdf
             "image/emf" # .emf
+            "image/x-emf" # .emf
             "image/wmf" # .wmf
+            "image/x-wmf" # .wmf
           ] (_: [ "draw.desktop" ])
         ) // (
           lib.genAttrs [

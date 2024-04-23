@@ -22,7 +22,7 @@ in
     xdg = {
       mimeApps = {
         enable = true;
-        # Adapted from:
+        # Based on:
         # https://raw.githubusercontent.com/mpv-player/mpv/02254b92dd237f03aa0a151c2a68778c4ea848f9/etc/mpv.desktop
         defaultApplications = lib.genAttrs [
           "application/ogg"
