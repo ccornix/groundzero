@@ -193,7 +193,7 @@ Below is a table of commands for common management tasks, where environment vari
 |-----------|---------------------|
 | Collect garbage[^gc] | `[sudo] nix-collect-garbage [-d]` |
 | Switch to new OS config | `sudo nixos-rebuild {switch\|boot} --flake $FLAKE0` (`nr {switch\|boot}`) |
-| Switch to new home config | `home-manager switch --flake $FLAKE0` (`hm switch`) |
+| Switch to new home config | `home-manager switch --flake $FLAKE0 -b old` (`hm switch`) |
 | Check the config[^repodir] | `nix flake check` |
 | Format source files[^repodir] | `nix fmt` |
 | Update the lock file[^repodir] | `nix flake update --commit-lock-file` |
