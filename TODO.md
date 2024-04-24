@@ -9,4 +9,3 @@
 - Fix SSH_AUTH_SOCK for rootless HM environments
 - Convert Neovim config to Nix!
 - Sync dircolors, mc colors
-- Add mc custom quick menu
