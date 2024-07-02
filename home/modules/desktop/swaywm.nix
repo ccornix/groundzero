@@ -163,7 +163,7 @@ in
             { class = "XEyes"; }
             { class = "Lxappearance"; }
             { app_id = "foot-floating"; }
-            { title = "Wine"; }
+            { title = "Need For Speed"; }
           ];
           titlebar = false;
         }; # floating
@@ -183,6 +183,10 @@ in
 
         keybindings = lib.mkOptionDefault (
           {
+            # Cancel default keybindings to not have "workspace 10"
+            "${mod}+0" = null;
+            "${mod}+Shift+0" = null;
+
             # Move workspaces between monitors
             "${mod}+${altMod}+${left}" = "move workspace to output left";
             "${mod}+${altMod}+${down}" = "move workspace to output down";
