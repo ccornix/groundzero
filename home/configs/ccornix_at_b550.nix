@@ -18,6 +18,7 @@ in
     gaming = {
       devilutionx.enable = true;
       diablo2.enable = true;
+      wine.enable = true;
     };
     virtualization.enable = true;
   };
