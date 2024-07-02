@@ -163,6 +163,7 @@ in
             { class = "XEyes"; }
             { class = "Lxappearance"; }
             { app_id = "foot-floating"; }
+            { title = "Wine"; }
           ];
           titlebar = false;
         }; # floating
