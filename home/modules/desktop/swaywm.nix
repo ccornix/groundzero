@@ -5,7 +5,7 @@ let
     cursorTheme
     termFont
     topBar
-    wallpaper
+    background
     ;
 
   cfg = config.my.desktop.swaywm;
@@ -219,7 +219,7 @@ in
 
         output = {
           "*" = with config.colorScheme.palette; {
-            bg = "${wallpaper.path} ${wallpaper.scaling} #${base00}";
+            bg = "${background.path} ${background.scaling} #${base00}";
           };
         }; # output
 
