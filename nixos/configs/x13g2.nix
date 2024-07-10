@@ -41,7 +41,10 @@
       ];
       kernelModules = [ "amdgpu" ];
     };
-    kernelModules = [ "kvm-amd" ];
+    blacklistedKernelModules = [ "k10temp" ];
+    extraModulePackages = [ config.boot.kernelPackages.zenpower ];
+    kernelModules = [ "kvm-amd" "zenpower" ];
+    kernelParams = [ "amd_pstate=active" ];
     loader.systemd-boot.enable = true;
   };
 
@@ -69,7 +72,25 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+
+  systemd.services.cpu-tune-perf = {
+    description = "Tune CPU performance";
+    after = [ "cpufreq.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = "yes";
+      ExecStart = ''
+        ${pkgs.bash}/bin/bash -c 'echo power | tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference'
+      '';
+        # ${pkgs.ryzenadj}/bin/ryzenadj \
+        #   --stapm-limit=9000 \
+        #   --fast-limit=13000 \
+        #   --slow-limit=10000 \
+        #   --tctl-temp=80
+    };
+  };
 
   system.stateVersion = "24.05";
 
