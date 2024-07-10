@@ -6,6 +6,7 @@ let
     "c236m"
     "hypervvm"
     "x13"
+    "x13g2"
     "x230"
   ];
 
