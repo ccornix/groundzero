@@ -2,6 +2,18 @@
 
 { inputs, config, pkgs, lib, ... }:
 
+let
+  ryzenNerfScript = pkgs.writeShellScriptBin "my-nerf-ryzen" ''
+    echo power |
+      tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
+    ${pkgs.ryzenadj}/bin/ryzenadj \
+      --fast-limit=15000 \
+      --slow-limit=12000 \
+      --stapm-limit=10000 \
+      --tctl-temp=70 \
+      --power-saving
+  '';
+in
 {
   imports = [
     inputs.nixpkgs.nixosModules.notDetected
@@ -74,21 +86,14 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 
-  systemd.services.cpu-tune-perf = {
-    description = "Tune CPU performance";
+  systemd.services.ryzen-nerf = {
+    description = "Nerf Ryzen performance to reduce heat and noise";
     after = [ "cpufreq.service" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = "yes";
-      ExecStart = ''
-        ${pkgs.bash}/bin/bash -c 'echo power | tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference'
-      '';
-        # ${pkgs.ryzenadj}/bin/ryzenadj \
-        #   --stapm-limit=9000 \
-        #   --fast-limit=13000 \
-        #   --slow-limit=10000 \
-        #   --tctl-temp=80
+      ExecStart = "${ryzenNerfScript}/bin/my-nerf-ryzen";
     };
   };
 
