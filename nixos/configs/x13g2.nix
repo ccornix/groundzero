@@ -6,12 +6,12 @@ let
   ryzenNerfScript = pkgs.writeShellScriptBin "my-nerf-ryzen" ''
     echo power |
       tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
-    ${pkgs.ryzenadj}/bin/ryzenadj \
-      --fast-limit=15000 \
-      --slow-limit=12000 \
-      --stapm-limit=10000 \
-      --tctl-temp=70 \
-      --power-saving
+    # ${pkgs.ryzenadj}/bin/ryzenadj \
+    #   --fast-limit=15000 \
+    #   --slow-limit=12000 \
+    #   --stapm-limit=10000 \
+    #   --tctl-temp=70 \
+    #   --power-saving
   '';
 in
 {
