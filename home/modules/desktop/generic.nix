@@ -1,6 +1,6 @@
 # Window manager-agnostic settings for Wayland
 
-{ config, pkgs, lib, ... }:
+{ inputs, config, pkgs, lib, ... }:
 
 let
   cfg = config.my.desktop.generic;
@@ -25,6 +25,7 @@ in
       libnotify # to manually send notifications
       pcmanfm # GUI file manager
       remmina # remote desktop app
+      signal-desktop # instant messaging app
       waypipe # remote connection utility to Wayland desktop
     ] ++ (builtins.attrValues (import ./scripts.nix { inherit pkgs; }));
 
