@@ -10,6 +10,10 @@
       enable = true;
       theme.termFont.size = 10;
     };
+    gaming = {
+      devilutionx.enable = true;
+      wine.enable = true;
+    };
     virtualization.enable = true;
   };
 
