@@ -37,6 +37,10 @@
       "xhci_pci"
     ];
     kernelModules = [ "kvm-intel" ];
+    kernelParams = [
+      # Re-clock Nouveau for max performance on GTX 750
+      "nouveau.config=NvClkMode=15"
+    ];
     loader.systemd-boot.enable = true;
   };
 
