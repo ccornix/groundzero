@@ -38,6 +38,7 @@
     ];
     kernelModules = [ "kvm-intel" ];
     kernelParams = [
+      "mitigations=off"
       # Re-clock Nouveau for max performance on GTX 750
       "nouveau.config=NvClkMode=15"
     ];
@@ -66,7 +67,7 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
   system.stateVersion = "23.11";
 
