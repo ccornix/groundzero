@@ -61,6 +61,11 @@ let
           label = "pcmanf[m]";
           cmd = "${pkgs.pcmanfm}/bin/pcmanfm";
         }
+        {
+          shortcut = "s";
+          label = "[s]ignal-desktop";
+          cmd = "${pkgs.signal-desktop}/bin/signal-desktop";
+        }
       ] ++ (
         lib.optional config.my.gaming.devilutionx.enable {
           shortcut = "d";
@@ -77,8 +82,8 @@ let
         # ) ++ (
         # TODO: re-introduce when adding Steam
         # lib.optional config.my.gaming.steam.enable {
-        #   shortcut = "s";
-        #   label = "[s]team";
+        #   shortcut = "t";
+        #   label = "s[t]eam";
         #   cmd = "my-steam";
         # }
       );
