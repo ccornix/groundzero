@@ -27,10 +27,6 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir $out
     cp -R * $out/
-
-    # Patch for https://github.com/JuliaInterop/RCall.jl/issues/339
-    # echo "patching $out"
-    # cp -L ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/julia/
   '';
   dontStrip = true;
   ldLibraryPath = lib.makeLibraryPath [
