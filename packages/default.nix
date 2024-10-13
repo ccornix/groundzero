@@ -16,5 +16,6 @@ in
   iso = isoConfig.config.system.build.isoImage;
 
   devilutionx = pkgs.callPackage ./devilutionx { };
-  # julia-fhs = pkgs.callPackage ./julia-fhs { };
+  julia-fhs = (pkgs.callPackage ./julia-fhs { }) "julia" "julia";
+  julia-fhs-bash = (pkgs.callPackage ./julia-fhs { }) "julia-bash" "bash";
 }
