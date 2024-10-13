@@ -14,8 +14,9 @@ let
     binutils
     clang
     cmake
-    curl
     expat
+    gcc
+    gfortran
     gmp
     gnumake
     gperf
@@ -27,6 +28,8 @@ let
     unzip
     utillinux
     which
+    # texliveScheme  # TODO: uncomment if, e.g., PGFPlotsX.jl is used
+    ncurses
   ];
 
   graphicalPackages = pkgs: with pkgs; [
@@ -41,7 +44,6 @@ let
     ffmpeg
     fontconfig
     freetype
-    gdk-pixbuf
     gettext
     glfw
     glib
@@ -59,21 +61,24 @@ let
     libsecret
     libselinux
     libuuid
+    libxkbcommon
+    mesa
     ncurses
     nspr
     nss
     pango
     pango.out
     pdf2svg
-    qt5.qtbase
-    qt5.qtwayland
     systemd
+    vulkan-loader
+    vulkan-headers
+    vulkan-validation-layers
+    wayland
     xorg.libICE
     xorg.libSM
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite
-    xorg.libXcursor
     xorg.libXcursor
     xorg.libXdamage
     xorg.libXext
