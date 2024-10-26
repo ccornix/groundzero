@@ -3,10 +3,7 @@
 let
   hosts = [
     "b550"
-    # FIXME: enable
-    # "b560"
-    # FIXME: remove
-    # "c236m"
+    "b560"
     "x13g2"
     "x230"
   ];
