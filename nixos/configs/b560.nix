@@ -14,9 +14,8 @@
     desktop.enable = true;
     network = {
       interfaces = {
-        # FIXME: add MAC addresses!
-        wired = { wired0 = ""; };
-        wireless = { wireless0 = ""; };
+        wired = { wired0 = "a8:a1:59:73:61:da"; };
+        wireless = { wireless0 = "d6:c9:d6:71:6b:24"; };
       };
       shares.enable = true;
       tailscale.enable = true;
@@ -30,7 +29,14 @@
 
   boot = {
     initrd.availableKernelModules = [
-      # FIXME: add modules
+      "ahci"
+      "nvme"
+      "sd_mod"
+      "sr_mod"
+      "uas"
+      "usb_storage"
+      "usbhid"
+      "xhci_pci"
     ];
     kernelModules = [ "kvm-intel" ];
     kernelParams = [ "mitigations=off" ];
@@ -61,7 +67,7 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "24.05";
 
   disko.devices = {
     disk = {
@@ -93,24 +99,6 @@
           }; # partitions
         }; # content
       }; # system
-      # FIXME: remove
-      # vm = {
-      #   type = "disk";
-      #   device = "/dev/disk/by-id/wwn-0x500a0751e67d29e6";
-      #   content = {
-      #     type = "gpt";
-      #     partitions = {
-      #       vm = {
-      #         size = "100%";
-      #         content = {
-      #           type = "filesystem";
-      #           format = "ext4";
-      #           mountpoint = "/var/lib/libvirt";
-      #         };
-      #       };
-      #     }; # partitions
-      #   }; # content
-      # }; # vm
       scratch = {
         type = "disk";
         device = "/dev/disk/by-id/wwn-0x500a0751e5ee2539";
