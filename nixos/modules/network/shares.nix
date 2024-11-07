@@ -36,12 +36,12 @@ in
 
     fileSystems = {
       "/nfs/nas/shared" = {
-        device = "192.168.10.10:/mnt/data-pool/shared";
+        device = "nas:/mnt/data-pool/shared";
         fsType = "nfs";
         options = options ++ [ "rw" ];
       };
       "/nfs/nas/archive" = {
-        device = "192.168.10.10:/mnt/data-pool/archive";
+        device = "nas:/mnt/data-pool/archive";
         fsType = "nfs";
         options = options ++ [ "rw" ];
       };
