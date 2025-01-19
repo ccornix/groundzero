@@ -58,8 +58,7 @@
       config.hardware.enableRedistributableFirmware;
     opengl = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
     };
   };
 
