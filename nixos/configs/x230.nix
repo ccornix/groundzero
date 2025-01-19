@@ -56,7 +56,7 @@
   hardware = {
     cpu.intel.updateMicrocode = lib.mkDefault
       config.hardware.enableRedistributableFirmware;
-    opengl = {
+    graphics = {
       enable = true;
       enable32Bit = true;
     };
