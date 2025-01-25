@@ -46,7 +46,10 @@
       ];
       kernelModules = [ "amdgpu" ];
     };
-    kernelModules = [ "kvm-amd" "nct6775" ];
+    blacklistedKernelModules = [ "k10temp" ];
+    extraModulePackages = [ config.boot.kernelPackages.zenpower ];
+    kernelModules = [ "kvm-amd" "nct6775" "zenpower" ];
+    kernelParams = [ "amd_pstate=active" ];
     loader.systemd-boot.enable = true;
   };
 
@@ -73,7 +76,7 @@
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "schedutil";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
 
   system.stateVersion = "23.11";
 
