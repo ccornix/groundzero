@@ -20,10 +20,10 @@
       diablo2.enable = true;
     };
     network = {
-      interfaces = {
-        wired = { wired0 = "a8:a1:59:34:0b:ea"; };
-        wireless = { wireless0 = "14:f6:d8:45:01:b9"; };
-      };
+      # interfaces = {
+        # wired = { wired0 = "a8:a1:59:34:0b:ea"; };
+        # wireless = { wireless0 = "14:f6:d8:45:01:b9"; };
+      # };
       shares.enable = true;
       tailscale.enable = true;
     };
@@ -72,7 +72,11 @@
     };
   };
 
-  networking.hostName = "b550";
+  networking = {
+    hostName = "b550";
+    # FIXME
+    # interfaces.<name>.wakeOnLan.enable = true;
+  };
 
   nixpkgs.hostPlatform = "x86_64-linux";
 

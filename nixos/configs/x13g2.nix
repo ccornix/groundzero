@@ -32,10 +32,10 @@ in
       diablo2.enable = true;
     };
     network = {
-      interfaces = {
-        wired = { wired0 = "9c:2d:cd:4f:d8:ff"; };
-        wireless = { wireless0 = "42:dd:9b:18:bc:e3"; };
-      };
+      # interfaces = {
+      #   wired = { wired0 = "9c:2d:cd:4f:d8:ff"; };
+      #   wireless = { wireless0 = "42:dd:9b:18:bc:e3"; };
+      # };
       shares.enable = true;
       tailscale.enable = true;
     };
