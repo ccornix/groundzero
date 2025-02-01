@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./networkd.nix
+    # ./networkd.nix
     ./shares.nix
     ./tailscale.nix
   ];

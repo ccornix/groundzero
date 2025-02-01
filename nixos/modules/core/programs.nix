@@ -10,6 +10,7 @@
     python3Minimal
     rsync
     wget
+    wol
 
     # Diagnostics
     dmidecode # for reading HW information (serials etc.) from the DMI table
