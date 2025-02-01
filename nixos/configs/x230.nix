@@ -13,10 +13,6 @@
   my = {
     desktop.enable = true;
     network = {
-      # interfaces = {
-      #   wired = { wired0 = "3c:97:0e:aa:52:ab"; };
-      #   wireless = { wireless0 = "00:6b:9e:01:c4:36"; };
-      # };
       shares.enable = true;
       tailscale.enable = true;
     };
