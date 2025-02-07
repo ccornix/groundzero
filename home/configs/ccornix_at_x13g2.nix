@@ -4,6 +4,7 @@
   imports = [ inputs.self.homeModules.default ./ccornix.nix ];
 
   my = {
+    primaryDisplayResolution = { horizontal = 1920; vertical = 1200; };
     desktop.enable = true;
     gaming = {
       devilutionx.enable = true;
