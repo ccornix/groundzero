@@ -12,11 +12,9 @@
     };
     virtualization.enable = true;
   };
-        
+
   wayland.windowManager.sway.config.output = {
-    HDMI-A-1 = {
-      adaptive_sync = "on"; 
-    };
+    HDMI-A-1 = { adaptive_sync = "on"; };
   };
 
   home.stateVersion = "23.11";
