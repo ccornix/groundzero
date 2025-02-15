@@ -19,11 +19,30 @@
         # };
       };
     };
+    languages = {
+      language-server.ruff = {
+        command = "ruff";
+        config.settings = {
+          lineLength = 80;
+          lint.select = ["E" "F" "I"];
+        };
+      };
+      language = [
+        {
+          name = "python";
+          language-servers = ["ruff"];
+          auto-format = true;
+          formatter = {
+            command = "ruff";
+            args = ["format" "-"];
+          };
+        }
+      ];
+    };
     extraPackages = [
-      # Convenience language servers that are available even outside of
-      # development shells
       pkgs.bash-language-server
       pkgs.nil
+      pkgs.ruff
     ];
   };
 }
