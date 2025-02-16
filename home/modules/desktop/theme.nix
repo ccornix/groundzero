@@ -139,18 +139,12 @@ in
         GDK_PIXBUF_MODULE_FILE =
           "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache";
         QT_AUTO_SCREEN_SCALE_FACTOR = 1;
-        # QT_FONT_DPI = 128;
       }; # sessionVariables
     }; # home
 
     gtk = {
       enable = true;
       theme = {
-        # TODO: Mint-Y theme seems more polished than the auto-generated one.
-        # name = config.colorScheme.slug;
-        # package = nix-colors-lib.gtkThemeFromScheme {
-        #   scheme = config.colorScheme;
-        # };
         name = "Mint-Y-Dark-Grey";
         package = pkgs.mint-themes;
       };
