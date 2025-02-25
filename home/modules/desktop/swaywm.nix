@@ -5,7 +5,6 @@ let
     cursorTheme
     termFont
     topBar
-    background
     ;
 
   cfg = config.my.desktop.swaywm;
@@ -50,6 +49,9 @@ in
   config = lib.mkIf cfg.enable {
     wayland.windowManager.sway = {
       enable = true;
+      # FIXME: workaround for
+      # https://github.com/nix-community/home-manager/issues/5311
+      checkConfig = false;
       systemd.enable = true;
       wrapperFeatures.gtk = true;
       xwayland = true;
@@ -216,12 +218,6 @@ in
 
         # Binding modes
         modes = lib.mkOptionDefault bindingModes.modes;
-
-        output = {
-          "*" = with config.colorScheme.palette; {
-            bg = "${background.path} ${background.scaling} #${base00}";
-          };
-        }; # output
 
         seat = {
           "*" = {

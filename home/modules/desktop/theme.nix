@@ -10,49 +10,10 @@ let
       pkg = (builtins.getAttr mod config.gtk).package;
     in
     lib.optional (pkg != null) pkg;
-
-  backgroundPkg = let
-      inherit (config.colorScheme.palette) base00 base01 base02 base03;
-      width = config.my.primaryDisplayResolution.horizontal;
-    in pkgs.stdenvNoCC.mkDerivation {
-      name = "my-background-image";
-      src = ./hexagons.svg;
-      dontUnpack = true;
-      buildInputs = [ pkgs.librsvg ];
-      buildPhase = ''
-        dstdir="$out/share/backgrounds"
-        mkdir -p "$dstdir"
-
-        cat >style.css <<EOF
-        .stroke { stroke:#${base00} !important; }
-        .fill-0 { fill:#${base01} !important; }
-        .fill-1 { fill:#${base02} !important; }
-        .fill-2 { fill:#${base03} !important; }
-        EOF
-
-        rsvg-convert --keep-aspect-ratio --width=${toString width} \
-          --stylesheet=style.css "$src" > "$dstdir/bg.png"
-      '';
-    };
 in
 {
   options.my.desktop.theme = {
     enable = lib.mkEnableOption "custom desktop theme";
-
-    background = {
-      path = lib.mkOption {
-        type = lib.types.str;
-        description = ''
-          Path to the desktop background image.
-        '';
-        default = "${backgroundPkg}/share/backgrounds/bg.png";
-      };
-
-      scaling = lib.mkOption {
-        type = lib.types.enum [ "stretch" "fit" "fill" "center" "tile" ];
-        default = "tile";
-      };
-    }; # background
 
     termFont = {
       name = lib.mkOption {
@@ -144,18 +105,10 @@ in
 
     gtk = {
       enable = true;
-      theme = {
-        name = "Mint-Y-Dark-Grey";
-        package = pkgs.mint-themes;
-      };
       font = {
         name = "DejaVu Sans";
         package = pkgs.dejavu_fonts;
         size = cfg.termFont.size;
-      };
-      iconTheme = {
-        name = "Mint-Y-Grey";
-        package = pkgs.mint-y-icons;
       };
       inherit (cfg) cursorTheme;
       gtk2.configLocation = "${config.xdg.configHome}/gtk-2.0/gtkrc";

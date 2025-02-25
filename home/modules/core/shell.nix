@@ -21,14 +21,6 @@
     profileExtra = ''
       mkdir -p $XDG_CACHE_HOME/bash
     '';
-    bashrcExtra = ''
-      if [[ $(tty) != /dev/tty* ]]; then
-        # alias mc='MC_SKIN=default mc'
-        alias mc='MC_SKIN=julia256 mc'
-        # Force mc black & white mode
-        # alias mc='mc -b'
-      fi
-    '';
   };
 
   programs.direnv = {

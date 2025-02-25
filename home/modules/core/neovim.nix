@@ -2,29 +2,29 @@
 
 let
   plugins = with pkgs.vimPlugins; [
-    nvim-cmp
-    cmp-nvim-lsp
     cmp-buffer
-    cmp-path
-    luasnip
-    cmp_luasnip
-    lspkind-nvim
-    nvim-lspconfig
-    nvim-treesitter.withAllGrammars
     cmp-cmdline
-    plenary-nvim
-    base16-nvim
-    lualine-nvim
-    nvim-web-devicons
-    nvim-tree-lua
-    trouble-nvim
-    todo-comments-nvim
-    vim-commentary
-    vim-obsession
-    vim-nix
-    vim-markdown
-    markdown-preview-nvim
+    cmp-nvim-lsp
+    cmp-path
+    cmp_luasnip
+    gruvbox-nvim
     julia-vim
+    lspkind-nvim
+    lualine-nvim
+    luasnip
+    markdown-preview-nvim
+    nvim-cmp
+    nvim-lspconfig
+    nvim-tree-lua
+    nvim-treesitter.withAllGrammars
+    nvim-web-devicons
+    plenary-nvim
+    todo-comments-nvim
+    trouble-nvim
+    vim-commentary
+    vim-markdown
+    vim-nix
+    vim-obsession
     # vim-dasht
   ];
 

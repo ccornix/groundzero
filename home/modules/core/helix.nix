@@ -4,7 +4,6 @@
   programs.helix = {
     enable = true;
     settings = {
-      theme = "gruvbox";
       editor = {
         rulers = [ 80 ];
         indent-guides = {

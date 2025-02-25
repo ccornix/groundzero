@@ -3,6 +3,7 @@
 {
   imports = [
     ./core
+    ./themes
     ./desktop
     ./gaming
     ./virtualization

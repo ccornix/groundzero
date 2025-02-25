@@ -20,30 +20,10 @@ in
       ln -sf "$ROOT/config-default.toml" "$ROOT/config.toml"
     '';
 
-    programs.i3status-rust = with config.colorScheme.palette; {
+    programs.i3status-rust = {
       enable = true;
       bars.default = {
         icons = "material-nf";
-        settings = {
-          theme = {
-            theme = "plain";
-            overrides = {
-              separator = " ";
-              idle_bg = "#${base00}";
-              idle_fg = "#${base05}";
-              info_bg = "#${base00}";
-              info_fg = "#${base05}";
-              good_bg = "#${base00}";
-              good_fg = "#${base05}";
-              critical_bg = "#${base00}";
-              critical_fg = "#${base08}";
-              warning_bg = "#${base00}";
-              warning_fg = "#${base0A}";
-              separator_bg = "#${base00}";
-              separator_fg = "#${base05}";
-            }; # overrides
-          }; # theme
-        }; # settings
         blocks = [
           {
             block = "focused_window";
