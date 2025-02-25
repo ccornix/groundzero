@@ -23,10 +23,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # NOTE: no longer works
-    # boot.initrd.postDeviceCommands = lib.mkAfter ''
-    #   zfs rollback -r ${rootBlankSnapshot}
-    # '';
+    boot.initrd.postResumeCommands = lib.mkAfter ''
+      zfs rollback -r ${rootBlankSnapshot}
+    '';
 
     boot = {
       kernelParams = [
@@ -38,24 +37,6 @@ in
         "zfs.zfs_arc_max=${toString (cfg.arcMaxMiB * 1048576)}";
 
       supportedFilesystems = [ "zfs" ];
-
-      initrd.systemd = {
-        enable = lib.mkDefault true;
-        services.initrd-rollback-root = {
-          description = "Rollback root dataset";
-          wantedBy = [ "initrd.target" ];
-          after = [ "zfs-import-rpool.service" ];
-          before = [ "sysroot.mount" ];
-          # Prevent system errors like:
-          # Job local-fs.target/start deleted to break ordering cycle starting with initrd-rollback-root.service/start
-          # Job systemd-tmpfiles-setup.service/start deleted to break ordering cycle starting with initrd-rollback-root.service/start
-          unitConfig.DefaultDependencies = "no";
-          serviceConfig = {
-            Type = "oneshot";
-            ExecStart = "${config.boot.zfs.package}/sbin/zfs rollback -r ${rootBlankSnapshot}";
-          };
-        };
-      };
     };
 
     environment = {
