@@ -4,7 +4,7 @@
   imports = [ inputs.self.homeModules.default ./ccornix.nix ];
 
   my = {
-    primaryDisplayResolution = { horizontal = 1680; vertical = 1050; };
+    primaryDisplayResolution = { horizontal = 1920; vertical = 1080; };
 
     desktop = {
       enable = true;
