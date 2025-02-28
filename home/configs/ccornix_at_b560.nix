@@ -14,5 +14,9 @@
     virtualization.enable = true;
   };
 
+  wayland.windowManager.sway.config.output = {
+    HDMI-A-1 = { mode = "1920x1080@50.000Hz"; };
+  };
+
   home.stateVersion = "24.05";
 }
