@@ -6,10 +6,7 @@
   my = {
     primaryDisplayResolution = { horizontal = 1920; vertical = 1080; };
 
-    desktop = {
-      enable = true;
-      theme.termFont.size = 10;
-    };
+    desktop.enable = true;
     gaming = {
       devilutionx.enable = true;
       wine.enable = true;
