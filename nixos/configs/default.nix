@@ -5,7 +5,6 @@ let
     "b550"
     "b560"
     "x13g2"
-    "x230"
   ];
 
   mkNixosConfig = host: nixpkgs.lib.nameValuePair host (
