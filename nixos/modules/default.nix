@@ -4,6 +4,7 @@
   imports = [
     ./core
     ./desktop
+    ./home-manager
     ./gaming
     ./network
     ./virtualization

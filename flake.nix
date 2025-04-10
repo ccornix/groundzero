@@ -36,7 +36,7 @@
         # HACK: add HM configs as packages to be checked by `nix flake check`
         # This hack could be removed if flake-schemas became widely accepted
         # and HM supported them
-        (self.lib.gatherHomeCfgActivationPkgs self.homeConfigurations)
+        # (self.lib.gatherHomeCfgActivationPkgs self.homeConfigurations)
       ];
     };
 }

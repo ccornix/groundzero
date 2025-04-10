@@ -3,11 +3,12 @@
 let
   inherit (nixpkgs) lib;
 
-  inventory = (
-    lib.mapAttrsToList
-      (host: config: { user = "ccornix"; inherit host; inherit (config) pkgs; })
-      self.nixosConfigurations
-  ) ++ [
+  inventory = # (
+    # lib.mapAttrsToList
+    #   (host: config: { user = "ccornix"; inherit host; inherit (config) pkgs; })
+    #   self.nixosConfigurations
+    #   ) ++
+      [
     {
       user = "ccornix";
       host = "debian";

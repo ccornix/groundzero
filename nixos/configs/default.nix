@@ -1,14 +1,16 @@
 { self, nixpkgs, ... } @ inputs:
 
 let
+  inherit (nixpkgs) lib;
+
   hosts = [
     "b550"
     "b560"
     "x13g2"
   ];
 
-  mkNixosConfig = host: nixpkgs.lib.nameValuePair host (
-    nixpkgs.lib.nixosSystem {
+  mkNixosConfig = host: lib.nameValuePair host (
+    lib.nixosSystem {
       specialArgs = { inherit inputs; };
       modules = [ ./${host}.nix ];
     }
