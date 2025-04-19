@@ -1,48 +1,37 @@
-{ pkgs, ... }:
-
 {
-  programs.helix = {
-    enable = true;
-    settings = {
-      theme = "gruvbox";
-      editor = {
-        rulers = [ 80 ];
-        indent-guides = {
-          character = "|";
-          render = true;
-        };
-        # TODO: uncomment in >=25.01
-        # end-of-line-diagnostics = "hint";
-        # inline-diagnostics = {
-        #   cursor-line = "error";
-        #   other-lines = "disable";
-        # };
-      };
-    };
-    languages = {
-      language-server.ruff = {
-        command = "ruff";
-        config.settings = {
-          lineLength = 80;
-          lint.select = ["E" "F" "I"];
-        };
-      };
-      language = [
-        {
-          name = "python";
-          language-servers = ["ruff"];
-          auto-format = true;
-          formatter = {
-            command = "ruff";
-            args = ["format" "-"];
-          };
-        }
-      ];
-    };
-    extraPackages = [
-      pkgs.bash-language-server
-      pkgs.nil
-      pkgs.ruff
-    ];
-  };
+  inputs,
+  config,
+  pkgs,
+  ...
+}:
+let
+  upkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+  link = config.lib.file.mkOutOfStoreSymlink;
+in
+{
+  # home.sessionVariables = {
+  #   EDITOR = "hx";
+  #   VISUAL = "hx";
+  # };
+
+  home.packages = [
+    pkgs.basedpyright
+    pkgs.bash-language-server
+    pkgs.helix
+    pkgs.nil
+    upkgs.nixfmt-rfc-style
+    upkgs.ruff
+    upkgs.shfmt
+  ];
+
+  xdg.configFile."helix/config.toml".source =
+    link "${config.my.flakeURI}/home/.config/helix/config.toml";
+
+  xdg.configFile."helix/languages.toml".source =
+    link "${config.my.flakeURI}/home/.config/helix/languages.toml";
+
+  # source:
+  # https://github.com/helix-editor/helix/wiki/Language-Server-Configurations#pyright--ruff
+  # performance benchmarks:
+  # hx -v your_file.py 2> helix.log
 }
