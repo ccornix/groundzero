@@ -22,6 +22,7 @@ in
     upkgs.nixfmt-rfc-style
     upkgs.ruff
     upkgs.shfmt
+    pkgs.texlab
   ];
 
   xdg.configFile."helix/config.toml".source =

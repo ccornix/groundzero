@@ -28,6 +28,42 @@ preview = true
 [language-server.ruff.config.python.settings.per-file-ignores]
 "__init__.py" = ["F401"]
 
+[language-server.texlab.config.texlab.chktex]
+onOpenAndSave = true
+onEdit = true
+
+[language-server.texlab.config.texlab.forwardSearch]
+executable = "zathura"
+args = [ "--synctex-forward", "%l:%c:%f", "%p" ]
+
+[language-server.texlab.config.texlab.build]
+# auxDirectory = "build"
+# logDirectory = "build"
+# pdfDirectory = "build"
+forwardSearchAfter = true
+onSave = true
+# executable = "latexmk"
+# args = [
+#   "-pdf",
+#   "-shell-escape",
+#   "-verbose",
+#   "-file-line-error",
+#   "-synctex=1",
+#   "-interaction=nonstopmode",
+#   # "-output-directory=build",
+#   "%f",
+#   ]
+executable = "tectonic"
+args = [
+ "-X",
+ "compile",
+ "--synctex",
+ "--keep-logs",
+ "--keep-intermediates",
+ # "--outdir=build",
+ "%f",
+ ]
+
 [[language]]
 name = "bash"
 auto-format = true
@@ -48,3 +84,10 @@ language-servers = ["ruff", "basedpyright"]
 file-types = ["py", "ipynb", "pyi"]
 formatter = { command = "ruff", args = ["format", "-"] }
 roots = ["pyproject.toml", "pyrightconfig.json", ".git", ".venv/"]
+
+[[language]]
+name = "latex"
+language-servers = ["texlab"]
+file-types = ["tex"]
+comment-token = "%"
+indent = { tab-width = 2, unit = "  " }

@@ -4,7 +4,10 @@
   imports = [ inputs.self.homeModules.default ./ccornix.nix ];
 
   my = {
-    desktop.enable = true;
+    desktop = {
+      enable = true;
+      latex.enable = true;
+    };
     gaming = {
       devilutionx.enable = true;
       diablo2.enable = true;

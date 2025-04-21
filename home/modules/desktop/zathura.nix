@@ -9,7 +9,13 @@ in
   options.my.desktop.zathura.enable = lib.mkEnableOption "zathura";
 
   config = lib.mkIf cfg.enable {
-    programs.zathura.enable = true;
+    programs.zathura = {
+      enable = true;
+      options = {
+        highlight-color = "rgba(255, 255, 255, 0.0)";
+        highlight-active-color = "rgba(255, 255, 255, 0.0)";
+      };
+    };
 
     xdg = {
       enable = true;

@@ -11,6 +11,7 @@ in
     ./i3status-rust.nix
     ./imv.nix
     ./inkscape.nix
+    ./latex.nix
     ./libreoffice.nix
     ./mako.nix
     ./mpv.nix

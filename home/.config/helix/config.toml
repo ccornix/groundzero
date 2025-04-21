@@ -27,7 +27,7 @@ character = "▏"
 skip-levels = 1
 
 [editor.inline-diagnostics]
-cursor-line = "error"
+cursor-line = "hint"
 other-lines = "disable"
 
 [editor.lsp]

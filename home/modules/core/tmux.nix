@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ ... }:
 
 {
   home.sessionVariables = {
@@ -13,6 +13,7 @@
     terminal = "xterm-256color";
     extraConfig = ''
       set -ga terminal-overrides ",xterm-256color:Tc"
+      set -sg escape-time 10
     '';
   };
 }
