@@ -5,7 +5,7 @@
 { lib, pkgs, ... }:
 
 let
-  # buildFHSUserEnv demands the following to be a function of pkgs
+  # buildFHSEnv demands the following to be a function of pkgs
 
   juliaPackage = pkgs: pkgs.callPackage ./julia.nix { };
 
@@ -119,7 +119,7 @@ let
   extraOutputsToInstall = [ "man" "dev" ];
 
   fhsCommand = commandName: commandScript:
-    pkgs.buildFHSUserEnv {
+    pkgs.buildFHSEnv {
       name = commandName; # Name used to start this UserEnv
       runScript = commandScript;
       inherit targetPkgs multiPkgs extraOutputsToInstall profile;
