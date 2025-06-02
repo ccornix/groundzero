@@ -38,7 +38,10 @@ in
       };
     };
 
-    services.printing.enable = true;
+    services.printing = {
+      enable = true;
+      drivers = [ pkgs.brlaser ];
+    };
 
     hardware.printers = {
       ensurePrinters = [
@@ -46,7 +49,10 @@ in
           name = "Brother_DCP_L2560DW";
           location = "Home";
           deviceUri = "ipp://mfp.home.arpa:631/ipp/print";
-          model = "drv:///sample.drv/generic.ppd";
+          # WORKAROUND: switch back to Brother printer driver from IPP
+          # Everywhere due to incorrect scaling
+          # model = "everywhere";
+          model = "drv:///brlaser.drv/brl2540.ppd";
           ppdOptions = {
             PageSize = "A4";
           };
