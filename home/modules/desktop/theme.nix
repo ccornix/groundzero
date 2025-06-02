@@ -62,10 +62,7 @@ in
 
       package = lib.mkOption {
         type = lib.types.package;
-        default = (
-          # Not all Nerd fonts are needed
-          pkgs.nerdfonts.override { fonts = [ "IosevkaTerm" ]; }
-        );
+        default = pkgs.nerd-fonts.iosevka-term;
       };
 
       style = lib.mkOption {
