@@ -5,14 +5,14 @@ let
 in
 if system == "x86_64-linux" then
   let
-    version = "1.5.3";
+    version = "1.5.4";
   in
   appimageTools.wrapType2 {
-    name = "devilutionx";
+    pname = "devilutionx";
     inherit version;
     src = fetchurl {
       url = "https://github.com/diasurgical/devilutionX/releases/download/${version}/devilutionx-linux-x86_64.appimage";
-      sha256 = "sha256-Ta3s+sjMgG1Ebd626m+Ynw7+VXabNJhwmXko8+VE6LQ=";
+      sha256 = "sha256-n7kau3Y8VUIUvXYi5doJlW3foC7jW5FqQf4YdjLPIiM=";
     };
   }
 else
