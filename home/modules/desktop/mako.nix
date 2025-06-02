@@ -13,17 +13,18 @@ in
   config = lib.mkIf cfg.enable {
     services.mako = with config.colorScheme.palette; {
       enable = true;
-      inherit font;
-      borderSize = 2;
-      backgroundColor = "#${base00}ff";
-      textColor = "#${base05}ff";
-      borderColor = "#${base05}ff";
-      icons = false;
-      extraConfig = ''
-        [urgency=high]
-        text-color=#${base08}ff
-        border-color=#${base08}ff
-      '';
+      settings = {
+        inherit font;
+        border-size = 2;
+        background-color = "#${base00}ff";
+        text-color = "#${base05}ff";
+        border-color = "#${base05}ff";
+        icons = false;
+        "urgency=high" = {
+          text-color = "#${base08}ff";
+          border-color = "#${base08}ff";
+        };
+      };
     };
   }; # config
 }
