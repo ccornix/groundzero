@@ -18,7 +18,7 @@
 
   nix = {
     enable = true;
-    package = pkgs.nixVersions.nix_2_19;
+    package = pkgs.nix; # pkgs.nixVersions.nix_2_XX;
   };
 
   # No local keys, agent forwarding expected
