@@ -1,4 +1,4 @@
-# Custom Intel Skylake desktop PC (C236)
+# Custom Intel Kaby Lake desktop PC (C236)
 
 { inputs, pkgs, config, lib, ... }:
 
@@ -33,7 +33,6 @@
         "usbhid"
         "xhci_pci"
       ];
-      kernelModules = [ "amdgpu" ];
     };
     kernelModules = [ "kvm-intel" ];
     kernelParams = [ "mitigations=off" ];
@@ -54,8 +53,14 @@
     graphics = {
       enable = true;
       enable32Bit = true;
-      extraPackages = [ pkgs.amdvlk ];
-      extraPackages32 = [ pkgs.driversi686Linux.amdvlk ];
+      extraPackages = with pkgs; [
+        intel-media-driver
+        intel-vaapi-driver
+      ];
+      extraPackages32 = with pkgs.driversi686Linux; [
+        intel-media-driver
+        intel-vaapi-driver
+      ];
     };
   };
 
@@ -65,7 +70,7 @@
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.05";
 
   disko.devices = {
     disk = {
@@ -97,40 +102,6 @@
           }; # partitions
         }; # content
       }; # system
-      # vm = {
-      #   type = "disk";
-      #   device = "/dev/disk/by-id/wwn-0x500a0751e67d29e6";
-      #   content = {
-      #     type = "gpt";
-      #     partitions = {
-      #       vm = {
-      #         size = "100%";
-      #         content = {
-      #           type = "filesystem";
-      #           format = "ext4";
-      #           mountpoint = "/var/lib/libvirt";
-      #         };
-      #       };
-      #     }; # partitions
-      #   }; # content
-      # }; # vm
-      # scratch = {
-      #   type = "disk";
-      #   device = "/dev/disk/by-id/wwn-0x500a0751e5ee2539";
-      #   content = {
-      #     type = "gpt";
-      #     partitions = {
-      #       scratch = {
-      #         size = "100%";
-      #         content = {
-      #           type = "filesystem";
-      #           format = "ext4";
-      #           mountpoint = "/scratch";
-      #         };
-      #       };
-      #     }; # partitions
-      #   }; # content
-      # }; # scratch
     }; # disk
     zpool = {
       rpool = {
@@ -204,6 +175,14 @@
           "safe/persist" = {
             type = "zfs_fs";
             mountpoint = "/persist";
+            options = {
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
+          };
+          "safe/vm" = {
+            type = "zfs_fs";
+            mountpoint = "/var/lib/libvirt";
             options = {
               mountpoint = "legacy";
               "com.sun:auto-snapshot" = "true";
