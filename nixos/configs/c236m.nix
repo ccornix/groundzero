@@ -35,7 +35,7 @@
         "xhci_pci"
       ];
     };
-    kernelModules = [ "kvm-intel" "igen6_edac" ];
+    kernelModules = [ "kvm-intel" "igen6_edac" "nct6775" ];
     kernelParams = [ "mitigations=off" ];
     loader.systemd-boot.enable = true;
   };
