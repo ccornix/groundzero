@@ -1,4 +1,4 @@
-# Custom Intel Kaby Lake desktop PC (C236)
+# Custom Intel Kaby Lake workstation (C236)
 
 { inputs, pkgs, config, lib, ... }:
 
@@ -62,6 +62,10 @@
         intel-vaapi-driver
       ];
     };
+    # ECC RAM monitoring for MCE events
+    # https://wiki.archlinux.org/title/Machine-check_exception
+    # https://wiki.gentoo.org/wiki/ECC_RAM
+    rasdaemon.enable = true;
   };
 
   networking.hostName = "c236m";
