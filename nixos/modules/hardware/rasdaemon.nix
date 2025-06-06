@@ -19,7 +19,6 @@ in
       ];
     };
 
-    # NOTE: the corresponding kernel module needs to be added, too!
     hardware.rasdaemon.enable = true;
   };
 }
