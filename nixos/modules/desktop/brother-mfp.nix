@@ -10,17 +10,15 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      persistence."/persist" = {
-        directories = [
-          { directory = "/var/lib/cups"; mode = "u=rwx,g=rx,o=rx"; }
-          {
-            directory = "/var/cache/cups";
-            group = "lp";
-            mode = "u=rwx,g=rwx,o=";
-          }
-        ];
-      };
+    environment.persistence."/persist" = {
+      directories = [
+        { directory = "/var/lib/cups"; mode = "u=rwx,g=rx,o=rx"; }
+        {
+          directory = "/var/cache/cups";
+          group = "lp";
+          mode = "u=rwx,g=rwx,o=";
+        }
+      ];
     };
 
     fonts.enableDefaultPackages = lib.mkDefault true;
