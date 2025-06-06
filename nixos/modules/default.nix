@@ -5,6 +5,7 @@
     ./core
     ./desktop
     ./gaming
+    ./hardware
     ./network
     ./virtualization
     ./zfs

@@ -12,6 +12,7 @@
 
   my = {
     desktop.enable = true;
+    hardware.rasdaemon.enable = true;
     network = {
       shares.enable = true;
       tailscale.enable = true;
@@ -34,7 +35,7 @@
         "xhci_pci"
       ];
     };
-    kernelModules = [ "kvm-intel" ];
+    kernelModules = [ "kvm-intel" "igen6_edac" ];
     kernelParams = [ "mitigations=off" ];
     loader.systemd-boot.enable = true;
   };
@@ -62,10 +63,6 @@
         intel-vaapi-driver
       ];
     };
-    # ECC RAM monitoring for MCE events
-    # https://wiki.archlinux.org/title/Machine-check_exception
-    # https://wiki.gentoo.org/wiki/ECC_RAM
-    rasdaemon.enable = true;
   };
 
   networking.hostName = "c236m";
