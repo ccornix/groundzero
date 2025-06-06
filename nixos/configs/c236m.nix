@@ -12,6 +12,10 @@
 
   my = {
     desktop.enable = true;
+    gaming = {
+      devilutionx.enable = true;
+      diablo2.enable = true;
+    };
     hardware.rasdaemon.enable = true;
     network = {
       shares.enable = true;
