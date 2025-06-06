@@ -35,8 +35,10 @@
         "xhci_pci"
       ];
     };
-    kernelModules = [ "kvm-intel" "igen6_edac" "nct6775" ];
+    kernelModules = [ "kvm-intel" "nct6775" ];
     kernelParams = [ "mitigations=off" ];
+    # NOTE: need a kernel >=6.13 for proper EDAC support on Kaby Lake S
+    kernelPackages = pkgs.linuxPackages_6_14;
     loader.systemd-boot.enable = true;
   };
 
