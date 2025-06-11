@@ -214,10 +214,12 @@ in
             # Internal display
             "--locked XF86MonBrightnessUp" = "exec my-brightness raise";
             "--locked XF86MonBrightnessDown" = "exec my-brightness lower";
-            "--locked ${mod}+b" = "exec my-brightness entry";
+            "--locked ${mod}+equal" = "exec my-brightness entry";
 
             # External monitor
-            "--locked Ctrl+${mod}+b" = "exec my-brightness entry --ddc";
+            "--locked Shift+XF86MonBrightnessUp" = "exec my-brightness raise --ddc";
+            "--locked Shift+XF86MonBrightnessDown" = "exec my-brightness lower --ddc";
+            "--locked ${mod}+Shift+equal" = "exec my-brightness entry --ddc";
 
             # Screenshot
             "${mod}+Print" = screenshotCmd "screen";
@@ -335,6 +337,7 @@ in
     home.packages = [
       pkgs.brightnessctl
       pkgs.ddcutil
+      pkgs.fuzzel
       pkgs.wireplumber
       pkgs.wl-clipboard # Wayland copy & paste command-line utilities
       scripts.my-brightness

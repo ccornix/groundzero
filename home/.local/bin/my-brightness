@@ -5,10 +5,6 @@ set  -euo pipefail
 
 levels=(0 1 3 7 13 22 33 46 61 79 100)  # round(100 * x^2.2), 0 <= x <= 1
 
-current() { brightnessctl -m i | cut -d',' -f 4 | tr -d '%'; }
-
-list() { for i in "${!levels[@]}"; do echo "${i}: ${levels[$i]}"; done; }
-
 next() {
   for i in "${!levels[@]}"; do
     level=${levels[$i]}
@@ -26,19 +22,28 @@ prev() {
 }
 
 choose() {
-  fuzzel -d --prompt-only "Brightness level [0-$((${#levels[@]}-1))] > "
+  ans="$(fuzzel -d \
+    --prompt-only="$1 display brightness level [0-$((${#levels[@]}-1))] > " \
+    --width=45
+  )"
+  [[ -z "$ans" ]] || echo "${levels[$ans]}"
 }
 
 if [[ "${2:-}" == "--ddc" ]]; then
-  setbr() { ddcutil setvcp 10 "$1"; }
+  opts=('--sleep-multiplier=0.5')
+  current() { ddcutil getvcp 10 --terse "${opts[@]}" | cut -d' ' -f 4; }
+  setbr() { [[ -z "$1" ]] || ddcutil setvcp 10 "$1" "${opts[@]}"; }
+  prefix="External"
 else
-  setbr() { brightnessctl -q set "$1%"; }
+  current() { brightnessctl -m i | cut -d',' -f 4 | tr -d '%'; }
+  setbr() { [[ -z "$1" ]] || brightnessctl -q set "$1%"; }
+  prefix="Internal"
 fi
 
 case ${1:-} in
   raise) setbr "$(next "$(current)")";;
   lower) setbr "$(prev "$(current)")";;
-  entry) setbr "${levels[$(choose)]}";;
+  entry) setbr "$(choose "$prefix")";;
   *) echo "usage: $(basename "$0") { raise | lower | entry } [--ddc]" >&2 &&
      exit 1;;
 esac
