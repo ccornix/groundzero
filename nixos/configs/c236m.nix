@@ -11,7 +11,10 @@
   ];
 
   my = {
-    desktop.enable = true;
+    desktop = {
+      enable = true;
+      brotherMfp.enable = true;
+    };
     gaming = {
       devilutionx.enable = true;
       diablo2.enable = true;
