@@ -4,7 +4,7 @@
   my-brightness = pkgs.writeShellApplication {
     name = "my-brightness";
     text = builtins.readFile ../../.local/bin/my-brightness;
-    runtimeInputs = with pkgs; [ brightnessctl gawk ];
+    runtimeInputs = with pkgs; [ brightnessctl ddcutil fuzzel ];
   };
 
   my-color-picker = pkgs.writeShellApplication {

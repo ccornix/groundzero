@@ -10,8 +10,6 @@ let
 
   cfg = config.my.desktop.swaywm;
 
-  hwBrCtl = config.my.hwBrightnessControl;
-
   # Python enviromnent for Sway
   swayPythonEnv = pkgs.python3.withPackages (
     ps: with pkgs; with ps; [ i3ipc msgpack ]
@@ -29,12 +27,6 @@ let
 
   screenshotCmd = mkCmdFunc
     "${scripts.my-sway-screenshot}/bin/my-sway-screenshot";
-  volumeCmd = mkCmdFunc "${scripts.my-volume}/bin/my-volume";
-  # Ignore brightness changes if controlled by hardware
-  brightnessCmd = op:
-    (mkCmdFunc "${scripts.my-brightness}/bin/my-brightness")
-      (if hwBrCtl then "get" else op)
-  ;
 
   # Modifiers
   mod = "Mod4";
@@ -197,15 +189,35 @@ in
             "${mod}+${altMod}+Up" = "move workspace to output up";
             "${mod}+${altMod}+Right" = "move workspace to output right";
 
-            # Audio and brightness controls
             # HACK: include --locked in the key name to enable these bindings
             # even if the screen is locked.
-            "--locked XF86AudioRaiseVolume" = volumeCmd "raise";
-            "--locked XF86AudioLowerVolume" = volumeCmd "lower";
-            "--locked XF86AudioMute" = volumeCmd "toggle-mute";
-            "--locked XF86AudioMicMute" = volumeCmd "toggle-mute-mic";
-            "--locked XF86MonBrightnessUp" = brightnessCmd "raise";
-            "--locked XF86MonBrightnessDown" = brightnessCmd "lower";
+
+            # Audio control
+
+            "--locked XF86AudioMute" =
+              "exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
+
+            "--locked XF86AudioMicMute" =
+              "exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle && " +
+              "brightnessctl -d platform::micmute set " +
+              "$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | " +
+                "grep -q MUTED; echo $?)";
+
+            "--locked XF86AudioRaiseVolume" =
+              "exec wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+";
+
+            "--locked XF86AudioLowerVolume" =
+              "exec wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%-";
+
+            # Brightness control
+
+            # Internal display
+            "--locked XF86MonBrightnessUp" = "exec my-brightness raise";
+            "--locked XF86MonBrightnessDown" = "exec my-brightness lower";
+            "--locked ${mod}+b" = "exec my-brightness entry";
+
+            # External monitor
+            "--locked Ctrl+${mod}+b" = "exec my-brightness entry --ddc";
 
             # Screenshot
             "${mod}+Print" = screenshotCmd "screen";
@@ -262,6 +274,7 @@ in
             command = "${pkgs.kanshi}/bin/kanshi";
             always = true;
           }
+          { command = "mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob"; }
         ];
 
         assigns = {
@@ -319,8 +332,12 @@ in
       ];
     };
 
-    home.packages = with pkgs; [
-      wl-clipboard # Wayland copy & paste command-line utilities
+    home.packages = [
+      pkgs.brightnessctl
+      pkgs.ddcutil
+      pkgs.wireplumber
+      pkgs.wl-clipboard # Wayland copy & paste command-line utilities
+      scripts.my-brightness
       swayPythonEnv
     ] ++ (builtins.attrValues scripts);
   }; # config

@@ -79,13 +79,6 @@ in
             interval = 10;
           }
           {
-            block = "backlight";
-            missing_format = "";
-            minimum = 10;
-            step_width = 10;
-            root_scaling = 2.4065401804339555;
-          }
-          {
             block = "sound";
             click = [
               {
