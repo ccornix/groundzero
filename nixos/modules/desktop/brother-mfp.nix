@@ -47,10 +47,7 @@ in
           name = "Brother_DCP_L2560DW";
           location = "Home";
           deviceUri = "ipp://mfp.home.arpa:631/ipp/print";
-          # WORKAROUND: switch back to Brother printer driver from IPP
-          # Everywhere due to incorrect scaling
-          # model = "everywhere";
-          model = "drv:///brlaser.drv/brl2540.ppd";
+          model = "drv:///brlaser.drv/brl2560d.ppd";
           ppdOptions = {
             PageSize = "A4";
           };
