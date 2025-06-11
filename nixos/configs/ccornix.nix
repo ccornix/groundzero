@@ -28,6 +28,7 @@ in
         "audio"
         "video"
         "input"
+        "i2c" # to control monitor brightness via DDC
         "dialout" # to access serial ports
       ]
       ++ self.lib.filterExistingGroups config [

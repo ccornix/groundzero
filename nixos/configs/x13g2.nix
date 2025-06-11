@@ -31,6 +31,7 @@ in
       devilutionx.enable = true;
       diablo2.enable = true;
     };
+    hardware.ddcci.enable = true;
     network = {
       shares.enable = true;
       tailscale.enable = true;

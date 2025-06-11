@@ -16,7 +16,10 @@
       devilutionx.enable = true;
       diablo2.enable = true;
     };
-    hardware.rasdaemon.enable = true;
+    hardware = {
+      ddcci.enable = true;
+      rasdaemon.enable = true;
+    };
     network = {
       shares.enable = true;
       tailscale.enable = true;
