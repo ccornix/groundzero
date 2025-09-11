@@ -28,44 +28,6 @@ in
 
     security.rtkit.enable = true;
 
-    services = {
-      upower.enable = true;
-
-      pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-
-        wireplumber.extraConfig = {
-          "thinkpad-dock-usb-audio" = {
-            "monitor.alsa.rules" = [
-              {
-                matches = [ { "node.nick" = "ThinkPad Dock USB Audio"; } ];
-                actions = {
-                  "update-props" = {
-                    "priority.device" = 100;
-                    "priority.session" = 100;
-                  };
-                };
-              }
-            ];
-          };
-          "monitor-hdmi-audio-output" = {
-            "monitor.alsa.rules" = [
-              {
-                matches = [ { "node.nick" = "PL2395W"; } ];
-                actions = {
-                  "update-props" = {
-                    "priority.device" = 1100;
-                    "priority.session" = 1100;
-                  };
-                };
-              }
-            ];
-          };
-        }; # wireplumber.extraConfig
-      }; # pipewire
-    };
+    services.upower.enable = true;
   };
 }

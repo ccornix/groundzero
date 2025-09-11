@@ -13,6 +13,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       # Essential apps
+      bluetuith # Bluetooth management TUI
       firefox-wayland # Wayland-native Mozilla Firefox
       pavucontrol # volume control GUI
       xorg.xeyes # to check whether an app is using Xwayland :)

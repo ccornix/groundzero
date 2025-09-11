@@ -7,6 +7,7 @@ in
   imports = [
     ./brother-mfp.nix
     ./generic.nix
+    ./pipewire.nix
     ./swaylock.nix
     ./swaywm.nix
   ];
@@ -17,6 +18,7 @@ in
 
   config.my.desktop = lib.mkIf cfg.enable {
     generic.enable = lib.mkForce true;
+    pipewire.enable = lib.mkForce true;
     swaylock.enable = lib.mkForce true;
     swaywm.enable = lib.mkForce true;
   };
