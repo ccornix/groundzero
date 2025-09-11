@@ -46,7 +46,11 @@
       ];
     };
     kernelModules = [ "kvm-intel" "nct6775" ];
-    kernelParams = [ "mitigations=off" ];
+    kernelParams = [
+      "mitigations=off"
+      "i915.enable_dc=0"
+      "i915.enable_guc=3"
+    ];
     # NOTE: need a kernel >=6.13 for proper EDAC support on Kaby Lake S
     kernelPackages = pkgs.linuxPackages_6_14;
     loader.systemd-boot.enable = true;
