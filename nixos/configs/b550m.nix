@@ -19,14 +19,18 @@
       devilutionx.enable = true;
       diablo2.enable = true;
     };
+    hardware = {
+      ddcci.enable = true;
+      rasdaemon.enable = true;
+    };
     network = {
       shares.enable = true;
       tailscale.enable = true;
     };
-    virtualization = {
-      enable = true;
-      persistent = false;
-    };
+    # virtualization = {
+    #   enable = true;
+    #   persistent = false;
+    # };
     zfs.enable = true;
   };
 
@@ -69,22 +73,22 @@
   };
 
   networking = {
-    hostName = "b550";
+    hostName = "b550m";
     # FIXME
     # interfaces.<name>.wakeOnLan.enable = true;
   };
 
   nixpkgs.hostPlatform = "x86_64-linux";
 
-  powerManagement.cpuFreqGovernor = lib.mkDefault "performance";
+  powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
 
-  system.stateVersion = "23.11";
+  system.stateVersion = "25.05";
 
   disko.devices = {
     disk = {
       system = {
         type = "disk";
-        device = "/dev/disk/by-id/nvme-eui.0025385b01424e74";
+        device = "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4e805a4b";
         content = {
           type = "gpt";
           partitions = {
@@ -110,23 +114,23 @@
           }; # partitions
         }; # content
       }; # system
-      vm = {
-        type = "disk";
-        device = "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b448b4e805a4b";
-        content = {
-          type = "gpt";
-          partitions = {
-            vm = {
-              size = "100%";
-              content = {
-                type = "filesystem";
-                format = "ext4";
-                mountpoint = "/var/lib/libvirt";
-              };
-            };
-          }; # partitions
-        }; # content
-      }; # vm
+      # vm = {
+      #   type = "disk";
+      #   device = "TODO";
+      #   content = {
+      #     type = "gpt";
+      #     partitions = {
+      #       vm = {
+      #         size = "100%";
+      #         content = {
+      #           type = "filesystem";
+      #           format = "ext4";
+      #           mountpoint = "/var/lib/libvirt";
+      #         };
+      #       };
+      #     }; # partitions
+      #   }; # content
+      # }; # vm
     }; # disk
     zpool = {
       rpool = {

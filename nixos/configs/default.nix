@@ -2,10 +2,10 @@
 
 let
   hosts = [
-    "c236m"
+    "b550m"
     "x13g2"
     # TODO: remove these hosts
-    # "b550"
+    # "c236m"
     # "b560"
   ];
 
