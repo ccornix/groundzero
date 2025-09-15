@@ -34,6 +34,9 @@
     zfs.enable = true;
   };
 
+  # NOTE: experimental
+  services.guix.enable = true;
+
   boot = {
     initrd = {
       availableKernelModules = [
