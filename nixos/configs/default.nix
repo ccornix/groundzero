@@ -4,9 +4,6 @@ let
   hosts = [
     "b550m"
     "x13g2"
-    # TODO: remove these hosts
-    # "c236m"
-    # "b560"
   ];
 
   mkNixosConfig =
