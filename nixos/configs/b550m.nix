@@ -188,6 +188,16 @@
               "com.sun:auto-snapshot" = "true";
             };
           };
+          "local/gnu" = {
+            type = "zfs_fs";
+            mountpoint = "/gnu";
+            options = {
+              atime = "off";
+              canmount = "on";
+              mountpoint = "legacy";
+              "com.sun:auto-snapshot" = "true";
+            };
+          };
           "local/log" = {
             type = "zfs_fs";
             mountpoint = "/var/log";
