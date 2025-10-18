@@ -44,27 +44,27 @@ let
         {
           shortcut = "f";
           label = "[f]irefox";
-          cmd = "${pkgs.firefox}/bin/firefox";
+          cmd = "firefox";
         }
         {
           shortcut = "n";
           label = "simple-sca[n]";
-          cmd = "${pkgs.simple-scan}/bin/simple-scan";
+          cmd = "simple-scan";
         }
         {
           shortcut = "p";
           label = "[p]avucontrol";
-          cmd = "${pkgs.pavucontrol}/bin/pavucontrol";
+          cmd = "pavucontrol";
         }
         {
           shortcut = "m";
           label = "pcmanf[m]";
-          cmd = "${pkgs.pcmanfm}/bin/pcmanfm";
+          cmd = "pcmanfm";
         }
         {
           shortcut = "s";
           label = "[s]ignal-desktop";
-          cmd = "${pkgs.signal-desktop}/bin/signal-desktop";
+          cmd = "signal-desktop";
         }
       ] ++ (
         lib.optional config.my.gaming.devilutionx.enable {
@@ -77,7 +77,7 @@ let
         lib.optional config.my.virtualization.enable {
           shortcut = "v";
           label = "[v]irt-manager";
-          cmd = "${pkgs.virt-manager}/bin/virt-manager";
+          cmd = "virt-manager";
         }
         # ) ++ (
         # TODO: re-introduce when adding Steam
