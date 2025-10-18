@@ -115,23 +115,23 @@
           }; # partitions
         }; # content
       }; # system
-      # vm = {
-      #   type = "disk";
-      #   device = "TODO";
-      #   content = {
-      #     type = "gpt";
-      #     partitions = {
-      #       vm = {
-      #         size = "100%";
-      #         content = {
-      #           type = "filesystem";
-      #           format = "ext4";
-      #           mountpoint = "/var/lib/libvirt";
-      #         };
-      #       };
-      #     }; # partitions
-      #   }; # content
-      # }; # vm
+      vm = {
+        type = "disk";
+        device = "/dev/disk/by-id/nvme-eui.e8238fa6bf530001001b444a41ef7e21";
+        content = {
+          type = "gpt";
+          partitions = {
+            vm = {
+              size = "100%";
+              content = {
+                type = "filesystem";
+                format = "xfs";
+                mountpoint = "/var/lib/libvirt";
+              };
+            };
+          }; # partitions
+        }; # content
+      }; # vm
     }; # disk
     zpool = {
       rpool = {
