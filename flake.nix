@@ -14,9 +14,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-colors.url = "github:misterio77/nix-colors";
+    # Community flake: updated hourly, ships its own Node runtime
+    claude-code-nix.url = "github:sadjow/claude-code-nix";
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, ... } @ inputs:
+  outputs = { self, nixpkgs, disko, home-manager, claude-code-nix, ... } @ inputs:
     let
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;

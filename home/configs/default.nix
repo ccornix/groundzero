@@ -1,4 +1,4 @@
-{ self, nixpkgs, home-manager, ... } @ inputs:
+{ self, nixpkgs, home-manager, claude-code-nix, ... } @ inputs:
 
 let
   inherit (nixpkgs) lib;
@@ -18,7 +18,11 @@ let
   mkHomeConfig = { user, host, pkgs }: lib.nameValuePair "${user}@${host}" (
     home-manager.lib.homeManagerConfiguration {
       inherit pkgs;
-      extraSpecialArgs = { inherit inputs; };
+      extraSpecialArgs = {
+        inherit inputs;
+        claude-code =
+          claude-code-nix.packages.${pkgs.stdenv.hostPlatform.system}.default;
+      };
       modules = [ ./${user}_at_${host}.nix ];
     }
   );

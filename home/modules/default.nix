@@ -6,6 +6,7 @@
     ./desktop
     ./gaming
     ./virtualization
+    ./llm
   ];
 
   options.my = {

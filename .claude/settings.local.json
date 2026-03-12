@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude mcp:*)",
+      "Bash(python3:*)",
+      "mcp__nixos__nix",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git stash:*)",
+      "Bash(git stash pop:*)",
+      "Bash(git rebase:*)",
+      "Bash(xargs cat:*)",
+      "Bash(lsblk:*)",
+      "Bash(grep:*)",
+      "Bash(nmcli dev wifi list:*)",
+      "Bash(nmcli dev show:*)",
+      "Bash(nmcli:*)",
+      "Bash(lspci:*)",
+      "Bash(iw dev:*)",
+      "Bash(iw list:*)",
+      "Bash(sudo cat:*)",
+      "Bash(sudo ls:*)",
+      "Bash(gh --version)",
+      "Bash(gh repo:*)",
+      "Bash(gh auth:*)",
+      "Bash(git checkout:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git remote:*)",
+      "Bash(nix fmt:*)",
+      "Bash(git check-ignore:*)"
+    ]
+  }
+}
