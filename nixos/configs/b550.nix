@@ -74,7 +74,7 @@
   };
 
   networking = {
-    hostName = "b550m";
+    hostName = "b550";
     # FIXME
     # interfaces.<name>.wakeOnLan.enable = true;
   };
