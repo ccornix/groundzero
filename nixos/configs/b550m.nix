@@ -1,6 +1,6 @@
 # Custom Ryzen desktop PC (B550)
 
-{ inputs, config, pkgs, lib, ... }:
+{ inputs, config, lib, ... }:
 
 {
   imports = [
@@ -82,6 +82,24 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "ondemand";
+
+  power.ups = {
+    enable = true;
+    ups = {
+      "eaton5e" = {
+        driver = "usbhid-ups";
+        port = "auto";
+      };
+    };
+    users.upsmon = {
+      passwordFile = "/persist/etc/nut/upsmon.password";
+      upsmon = "primary";
+    };
+    upsmon.monitor."eaton5e" = {
+      user = "upsmon";
+      type = "primary";
+    };
+  };
 
   system.stateVersion = "25.05";
 
