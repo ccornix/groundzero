@@ -16,14 +16,14 @@ in
   # };
 
   home.packages = [
-    pkgs.basedpyright
+    upkgs.basedpyright
     pkgs.bash-language-server
     pkgs.helix
     pkgs.nil
-    upkgs.nixfmt-rfc-style
+    pkgs.nixfmt
     upkgs.ruff
     upkgs.shfmt
-    pkgs.texlab
+    upkgs.texlab
   ];
 
   xdg.configFile."helix/config.toml".source =

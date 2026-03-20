@@ -14,8 +14,7 @@ in
   config = lib.mkIf cfg.enable {
     home = {
       packages = [
-        # FIXME
-        # myPkgs.quake3e
+        myPkgs.quake3e
       ];
     };
   };
