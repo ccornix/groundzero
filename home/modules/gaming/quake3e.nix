@@ -15,6 +15,7 @@ in
     home = {
       packages = [
         myPkgs.quake3e
+        pkgs.wayland-utils
       ];
     };
   };
