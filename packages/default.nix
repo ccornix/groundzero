@@ -16,6 +16,8 @@ in
   iso = isoConfig.config.system.build.isoImage;
 
   devilutionx = pkgs.callPackage ./devilutionx { };
+  # FIXME
+  # quake3e = pkgs.callPackage ./quake3e { };
   julia-fhs = (pkgs.callPackage ./julia-fhs { }) "julia" "julia";
   julia-fhs-bash = (pkgs.callPackage ./julia-fhs { }) "julia-bash" "bash";
 }
