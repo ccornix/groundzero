@@ -5,7 +5,7 @@ let
 in
 if system == "x86_64-linux" then
   let
-    version = "1.5.4";
+    version = "1.5.5";
   in
   appimageTools.wrapType2 {
     pname = "devilutionx";

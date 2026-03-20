@@ -4,12 +4,11 @@
   programs = {
     ssh = {
       enable = true;
-      forwardAgent = true;
-      # FIXME: switch later to this new option
-      # addKeysToAgent = "yes";
-      extraConfig = ''
-        AddKeysToAgent yes
-      '';
+      matchBlocks."*" = {
+        forwardAgent = true;
+        addKeysToAgent = "yes";
+      };
+      enableDefaultConfig = false;
     };
 
     keychain = {

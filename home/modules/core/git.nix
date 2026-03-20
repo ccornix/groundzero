@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   home.packages = [
@@ -7,7 +7,7 @@
 
   programs.git = {
     enable = true;
-    extraConfig = {
+    settings = {
       pull = { rebase = false; };
       init = { defaultBranch = "main"; };
     };

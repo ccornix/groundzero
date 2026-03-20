@@ -26,7 +26,7 @@ let
     openssl
     stdenv.cc
     unzip
-    utillinux
+    util-linux
     which
     # texliveScheme  # TODO: uncomment if, e.g., PGFPlotsX.jl is used
     ncurses
@@ -54,7 +54,7 @@ let
     gtk3
     libGL
     libcap
-    libgnome-keyring3
+    libgnome-keyring
     libgpg-error
     libnotify
     libpng

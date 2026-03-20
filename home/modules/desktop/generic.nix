@@ -3,8 +3,9 @@
 { inputs, config, pkgs, lib, ... }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) system;
   cfg = config.my.desktop.generic;
-  upkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+  upkgs = inputs.nixpkgs-unstable.legacyPackages.${system};
 in
 {
   options.my.desktop.generic = {
@@ -15,7 +16,7 @@ in
     home.packages = with pkgs; [
       # Essential apps
       bluetuith # Bluetooth management TUI
-      firefox-wayland # Wayland-native Mozilla Firefox
+      firefox # Wayland-native Mozilla Firefox
       pavucontrol # volume control GUI
       xorg.xeyes # to check whether an app is using Xwayland :)
 

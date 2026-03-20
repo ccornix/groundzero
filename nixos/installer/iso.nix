@@ -32,10 +32,5 @@ in
     initialHashedPassword = lib.mkForce null;
   };
 
-  isoImage = {
-    isoName = lib.mkForce "nixos-${system}.iso";
-    # Reduce compression
-    # https://github.com/NixOS/nixpkgs/blob/50f9b3107a09ed35bbf3f9ab36ad2683619debd2/nixos/lib/make-squashfs.nix#L8Compression
-    squashfsCompression = "zstd -Xcompression-level 6";
-  };
+  image.fileName = lib.mkForce "nixos-${system}.iso";
 }

@@ -5,7 +5,8 @@
   ...
 }:
 let
-  upkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+  inherit (pkgs.stdenv.hostPlatform) system;
+  upkgs = inputs.nixpkgs-unstable.legacyPackages.${system};
   link = config.lib.file.mkOutOfStoreSymlink;
 in
 {
