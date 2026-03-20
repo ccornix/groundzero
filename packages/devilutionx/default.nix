@@ -12,7 +12,7 @@ if system == "x86_64-linux" then
     inherit version;
     src = fetchurl {
       url = "https://github.com/diasurgical/devilutionX/releases/download/${version}/devilutionx-linux-x86_64.appimage";
-      sha256 = "sha256-n7kau3Y8VUIUvXYi5doJlW3foC7jW5FqQf4YdjLPIiM=";
+      sha256 = "sha256-OKiLPh8SfshDaUmhdmk3g4umWWoVaGdzxpx+BIKBbGE=";
     };
   }
 else
