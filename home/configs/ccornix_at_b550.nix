@@ -11,6 +11,7 @@
     gaming = {
       devilutionx.enable = true;
       diablo2.enable = true;
+      quake3e.enable = true;
       wine.enable = true;
     };
     virtualization.enable = true;
