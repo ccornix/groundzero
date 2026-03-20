@@ -1,7 +1,12 @@
 { config, ... }:
 
 {
-  home.sessionVariables.FLAKE0 = config.my.flakeURI;
+  home = {
+    sessionVariables.FLAKE0 = config.my.flakeURI;
+    sessionPath = [
+      "$HOME/.local/bin"
+    ];
+  };
 
   programs.bash = {
     enable = true;
