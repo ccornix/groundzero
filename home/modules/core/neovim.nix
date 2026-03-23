@@ -62,6 +62,8 @@ in
       nodePackages.bash-language-server
       nil
       shellcheck
+      gcc
+      ripgrep
 
       pylspWrapper
     ];

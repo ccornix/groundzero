@@ -1,23 +1,23 @@
 return function()
-  local lspconfig = require('lspconfig')
-
   local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-  lspconfig.pylsp.setup({
+  -- Apply capabilities globally to all servers
+  vim.lsp.config('*', { capabilities = capabilities })
+
+  -- Per-server customisation (only where defaults need overriding)
+
+  vim.lsp.config('pylsp', {
     on_attach = function(_, bufnr)
       -- WORKAROUND: for broken gq with python-lsp-server
       -- Clear the formatexpr function call set by python-lsp-server
       vim.api.nvim_buf_set_option(bufnr, 'formatexpr', '')
     end,
-    plugins = { pycodestyle = { maxLineLength = 79 } },
-    capabilities = capabilities,
+    settings = {
+      pylsp = { plugins = { pycodestyle = { maxLineLength = 79 } } },
+    },
   })
 
-  lspconfig.nil_ls.setup({ capabilities = capabilities })
-
-  lspconfig.bashls.setup({ capabilities = capabilities })
-
-  lspconfig.lua_ls.setup({
+  vim.lsp.config('lua_ls', {
     settings = {
       Lua = {
         runtime = { version = 'LuaJIT' },
@@ -32,8 +32,10 @@ return function()
         telemetry = { enable = false },
       },
     },
-    capabilities = capabilities,
   })
+
+  -- Enable all servers (nil_ls and bashls need no extra config)
+  vim.lsp.enable({ 'pylsp', 'nil_ls', 'bashls', 'lua_ls' })
 
   vim.diagnostic.config({ virtual_text = false })
 

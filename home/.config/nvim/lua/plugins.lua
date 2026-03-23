@@ -34,7 +34,7 @@ require('lazy').setup({
       { 'onsails/lspkind.nvim', event = 'VimEnter' },
     },
   },
-  { 'neovim/nvim-lspconfig', config = require('configs.nvim-lspconfig') },
+  -- { 'neovim/nvim-lspconfig', config = require('configs.nvim-lspconfig') },
   {
     'nvim-treesitter/nvim-treesitter',
     config = require('configs.nvim-treesitter'),
