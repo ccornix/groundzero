@@ -27,6 +27,7 @@
       nixosConfigurations = import ./nixos/configs inputs;
       homeModules.default = import ./home/modules;
       homeConfigurations = import ./home/configs inputs;
+      overlays.default = import ./overlays inputs;
       devShells = import ./nixos/installer inputs;
       formatter = forAllSystems (system:
         nixpkgs.legacyPackages.${system}.nixpkgs-fmt

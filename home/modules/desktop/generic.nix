@@ -1,11 +1,9 @@
 # Window manager-agnostic settings for Wayland
 
-{ inputs, config, pkgs, lib, ... }:
+{ config, pkgs, lib, ... }:
 
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
   cfg = config.my.desktop.generic;
-  upkgs = inputs.nixpkgs-unstable.legacyPackages.${system};
 in
 {
   options.my.desktop.generic = {
@@ -28,7 +26,7 @@ in
       libnotify # to manually send notifications
       pcmanfm # GUI file manager
       remmina # remote desktop app
-      upkgs.signal-desktop # instant messaging app
+      pkgs.unstable.signal-desktop # instant messaging app
       waypipe # remote connection utility to Wayland desktop
     ] ++ (builtins.attrValues (import ./scripts.nix { inherit pkgs; }));
 

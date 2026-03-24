@@ -1,12 +1,6 @@
-{
-  inputs,
-  config,
-  pkgs,
-  ...
-}:
+{ config, pkgs, ... }:
+
 let
-  inherit (pkgs.stdenv.hostPlatform) system;
-  upkgs = inputs.nixpkgs-unstable.legacyPackages.${system};
   link = config.lib.file.mkOutOfStoreSymlink;
 in
 {
@@ -16,14 +10,14 @@ in
   # };
 
   home.packages = [
-    upkgs.basedpyright
+    pkgs.unstable.basedpyright
     pkgs.bash-language-server
     pkgs.helix
     pkgs.nil
     pkgs.nixfmt
-    upkgs.ruff
-    upkgs.shfmt
-    upkgs.texlab
+    pkgs.unstable.ruff
+    pkgs.unstable.shfmt
+    pkgs.unstable.texlab
   ];
 
   xdg.configFile."helix/config.toml".source =
