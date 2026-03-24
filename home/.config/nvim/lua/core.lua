@@ -159,7 +159,7 @@ vim.keymap.set(
 -- }}}
 
 -- trouble.nvim {{{
-vim.keymap.set('', '<leader>t', [[:TroubleToggle<CR>]], opts('Toggle trouble'))
+vim.keymap.set('', '<leader>t', [[:Trouble diagnostics toggle<CR>]], opts('Toggle trouble'))
 -- }}}
 
 -- todo-comments.nvim {{{
