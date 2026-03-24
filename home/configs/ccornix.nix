@@ -11,5 +11,5 @@
     email = "ccornix1758@gmail.com";
   };
 
-  my.flakeURI = "${config.home.homeDirectory}/devel/groundzero";
+  my.flakeURI = "${config.home.homeDirectory}/repos/groundzero";
 }
