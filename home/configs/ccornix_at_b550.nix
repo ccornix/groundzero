@@ -14,7 +14,7 @@
       quake3e.enable = true;
       wine.enable = true;
     };
-    llm.claude.enable = true;
+    # llm.claude.enable = true;
     virtualization.enable = true;
   };
 
