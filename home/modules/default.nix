@@ -5,6 +5,7 @@
     ./core
     ./desktop
     ./gaming
+    ./llm
     ./virtualization
   ];
 
