@@ -25,6 +25,7 @@
     };
     network = {
       shares.enable = true;
+      netbird.enable = true;
       tailscale.enable = true;
     };
     # virtualization = {
