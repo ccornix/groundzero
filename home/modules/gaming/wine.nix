@@ -10,9 +10,9 @@ in
 
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
-      wineWowPackages.waylandFull
-      # wineWowPackages.full
-      wineWowPackages.fonts
+      wineWow64Packages.waylandFull
+      # wineWow64Packages.full
+      wineWow64Packages.fonts
     ];
   };
 }

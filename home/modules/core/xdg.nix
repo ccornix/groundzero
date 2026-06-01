@@ -37,6 +37,7 @@
     userDirs = {
       enable = true;
       createDirectories = true;
+      setSessionVariables = true;
       # Point disabled directories to the home dir
       # https://freedesktop.org/wiki/Software/xdg-user-dirs/
       desktop = "${config.home.homeDirectory}/tmp";

@@ -23,7 +23,7 @@ in
         scrollback = {
           lines = 1000;
         };
-        colors = with config.colorScheme.palette; {
+        colors-dark = with config.colorScheme.palette; {
           background = base00;
           foreground = base05;
 

@@ -3,7 +3,7 @@
 {
   home.packages = [
     pkgs.htop
-    pkgs.neofetch
+    pkgs.fastfetch
     pkgs.unzip
   ];
 }

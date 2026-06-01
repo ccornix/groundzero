@@ -10,7 +10,6 @@ let
     cmp_luasnip
     lspkind-nvim
     nvim-lspconfig
-    nvim-treesitter.withAllGrammars
     cmp-cmdline
     plenary-nvim
     base16-nvim
@@ -58,8 +57,8 @@ in
     viAlias = true;
     vimAlias = true;
     extraPackages = with pkgs; [
+      bash-language-server
       lua-language-server
-      nodePackages.bash-language-server
       nil
       shellcheck
       gcc
@@ -71,7 +70,9 @@ in
       python-lsp-server
     ];
     plugins = map mkPluginSpec plugins;
-    extraLuaConfig = "require('core')";
+    initLua = "require('core')";
+    withPython3 = true;
+    withRuby = false;
   };
 
   xdg = {

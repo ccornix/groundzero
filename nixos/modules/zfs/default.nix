@@ -3,6 +3,7 @@
 let
   cfg = config.my.zfs;
 
+  rootPoolName = "rpool";
   rootBlankSnapshot = "rpool/local/root@blank";
 
   rootDiffScript = pkgs.writeShellScriptBin "my-root-diff" ''
@@ -23,9 +24,36 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.initrd.postResumeCommands = lib.mkAfter ''
-      zfs rollback -r ${rootBlankSnapshot}
-    '';
+    # boot.initrd.postResumeCommands = lib.mkAfter ''
+    #   zfs rollback -r ${rootBlankSnapshot}
+    # '';
+    boot.initrd.systemd.services.rollback = {
+      description = "Rollback root ZFS dataset to blank snapshot";
+
+      wantedBy = [ "initrd.target" ];
+
+      # Must run after the ZFS pool is imported...
+      after = [
+        "zfs-import-${rootPoolName}.service"
+      ];
+
+      # ...but before the root dataset is mounted
+      before = [ "sysroot.mount" ];
+
+      path = [ pkgs.zfs ];
+
+      unitConfig.DefaultDependencies = "no";
+
+      serviceConfig = {
+        Type = "oneshot";
+        StandardOutput = "journal+console";
+        StandardError  = "journal+console";
+      };
+
+      script = ''
+        zfs rollback -r ${rootBlankSnapshot}
+      '';
+    };
 
     boot = {
       kernelParams = [
@@ -37,6 +65,8 @@ in
         "zfs.zfs_arc_max=${toString (cfg.arcMaxMiB * 1048576)}";
 
       supportedFilesystems = [ "zfs" ];
+
+      zfs.forceImportRoot = false;
     };
 
     environment = {

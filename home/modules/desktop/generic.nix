@@ -16,7 +16,7 @@ in
       bluetuith # Bluetooth management TUI
       firefox # Wayland-native Mozilla Firefox
       pavucontrol # volume control GUI
-      xorg.xeyes # to check whether an app is using Xwayland :)
+      xeyes # to check whether an app is using Xwayland :)
 
       # Additional apps
       ffmpeg-full # to record and convert audio and video

@@ -4,9 +4,9 @@
   programs = {
     ssh = {
       enable = true;
-      matchBlocks."*" = {
-        forwardAgent = true;
-        addKeysToAgent = "yes";
+      settings."*" = {
+        ForwardAgent = true;
+        AddKeysToAgent = "yes";
       };
       enableDefaultConfig = false;
     };

@@ -74,25 +74,25 @@ let
     vulkan-headers
     vulkan-validation-layers
     wayland
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXt
-    xorg.libXtst
-    xorg.libXxf86vm
-    xorg.libxcb
-    xorg.libxkbfile
-    xorg.xorgproto
+    libice
+    libsm
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
+    libxt
+    libxtst
+    libxxf86vm
+    libxcb
+    libxkbfile
+    xorgproto
     zlib
   ];
 
@@ -111,7 +111,7 @@ let
   '';
 
   graphicalEnvVars = ''
-    export QTCOMPOSE=${pkgs.xorg.libX11}/share/X11/locale
+    export QTCOMPOSE=${pkgs.libx11}/share/X11/locale
   '';
 
   profile = stdEnvVars + graphicalEnvVars;

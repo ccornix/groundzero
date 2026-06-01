@@ -35,8 +35,7 @@ vim.opt.expandtab = true -- tabs are spaces
 
 -- Folding {{{
 vim.opt.foldenable = false -- no folding, enabled manually using :set fen
-vim.opt.foldmethod = 'expr' -- fold based on tree-sitter
-vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.foldmethod = 'indent' -- fold based on indentation
 -- }}}
 
 -- UI config {{{
@@ -78,6 +77,17 @@ end
 -- }}} HIGHLIGHTS
 
 -- AUTOCOMMANDS {{{
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "*",
+  group = vim.api.nvim_create_augroup("EnableTreesitterHighlighting", {
+    clear = true
+  }),
+  desc = "Try to enable tree-sitter syntax highlighting",
+  callback = function()
+    pcall(function() vim.treesitter.start() end)
+  end,
+})
 
 vim.api.nvim_create_autocmd({ 'BufRead', 'BufNewFile' }, {
   pattern = { '*.md' },

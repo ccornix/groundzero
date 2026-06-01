@@ -8,6 +8,8 @@ in
 {
   imports = [ "${modulesPath}/installer/cd-dvd/installation-cd-minimal.nix" ];
 
+  boot.zfs.forceImportRoot = false;
+
   environment = {
     systemPackages = [
       pkgs.git
@@ -18,7 +20,7 @@ in
 
   networking = {
     networkmanager.enable = true;
-    wireless.enable = false; # Disable wpa_supplicant
+    # wireless.enable = false; # Disable wpa_supplicant
   };
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];

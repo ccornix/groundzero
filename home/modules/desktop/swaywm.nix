@@ -325,13 +325,10 @@ in
           resumeCommand = ''${swaymsg} "output * dpms on"'';
         }
       ];
-      events = [
-        {
-          event = "before-sleep";
-          command = "${pkgs.procps}/bin/pgrep swaylock || ${swaylock}";
-        }
-        { event = "lock"; command = swaylock; }
-      ];
+      events = {
+        "before-sleep" = "${pkgs.procps}/bin/pgrep swaylock || ${swaylock}";
+        "lock" = "swaylock";
+      };
     };
 
     home.packages = [

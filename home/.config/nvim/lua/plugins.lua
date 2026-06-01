@@ -36,11 +36,6 @@ require('lazy').setup({
   },
   -- { 'neovim/nvim-lspconfig', config = require('configs.nvim-lspconfig') },
   {
-    'nvim-treesitter/nvim-treesitter',
-    config = require('configs.nvim-treesitter'),
-    build = ':TSUpdate',
-  },
-  {
     'nvimtools/none-ls.nvim',
     ft = {},
     dependencies = { 'nvim-lua/plenary.nvim' },
