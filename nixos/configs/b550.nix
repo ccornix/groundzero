@@ -11,6 +11,7 @@
   ];
 
   my = {
+    containers.claude.enable = true;
     desktop = {
       enable = true;
       brotherMfp.enable = true;

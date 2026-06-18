@@ -1,0 +1,56 @@
+# Containerfile
+#
+# Minimal, isolated Claude Code environment for Podman. Alpine 3.19+ is an
+# officially supported Claude Code platform, and Anthropic publishes a
+# native apk package for it, so this needs no Node.js runtime at all.
+#
+# Build context must include this file and entrypoint.sh side by side.
+
+ARG ALPINE_VERSION=3.21
+FROM docker.io/library/alpine:${ALPINE_VERSION}
+
+# Base toolchain. Add whatever your projects actually need (a language
+# runtime, build-base, a database client, ...) -- this is deliberately bare.
+RUN apk add --no-cache \
+        bash \
+        ca-certificates \
+        curl \
+        git \
+        openssh-client \
+        less \
+        ripgrep \
+        libgcc \
+        libstdc++ \
+        sudo \
+        tzdata
+
+# Claude Code, from Anthropic's signed apk repository. Key fingerprint per
+# https://code.claude.com/docs/en/setup#install-with-linux-package-managers
+RUN wget -O /etc/apk/keys/claude-code.rsa.pub \
+        https://downloads.claude.ai/keys/claude-code.rsa.pub \
+ && echo "395759c1f7449ef4cdef305a42e820f3c766d6090d142634ebdb049f113168b6  /etc/apk/keys/claude-code.rsa.pub" \
+        | sha256sum -c - \
+ && echo "https://downloads.claude.ai/claude-code/apk/stable" >> /etc/apk/repositories \
+ && apk add --no-cache claude-code
+
+# Unprivileged user, fixed at uid/gid 1000. Podman's
+# `--userns=keep-id:uid=1000,gid=1000` (used in the wrapper script) maps
+# *your* host uid onto this container uid at runtime, so the same image
+# works for any host user without rebuilding per machine.
+RUN addgroup -g 1000 dev \
+ && adduser -D -u 1000 -G dev -s /bin/bash dev \
+ && echo "dev ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/dev \
+ && chmod 0440 /etc/sudoers.d/dev \
+ && mkdir -p /home/dev /workspace \
+ && chown -R dev:dev /home/dev /workspace
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+USER dev
+WORKDIR /workspace
+ENV HOME=/home/dev \
+    USE_BUILTIN_RIPGREP=0 \
+    DISABLE_AUTOUPDATER=1
+
+ENTRYPOINT ["entrypoint.sh"]
