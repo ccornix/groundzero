@@ -50,13 +50,60 @@ RUN groupadd -g 1000 developer \
  && mkdir -p /home/developer /workspace \
  && chown -R developer:developer /home/developer /workspace
 
+# Nix package manager, single-user install with the store owned by
+# `developer`. This container is rootless and runs with `--cap-drop=ALL`, so
+# Nix's build sandbox -- which needs nested user namespaces -- cannot work;
+# it is disabled here. The /nix store is persisted across runs via a named
+# volume (see default.nix), so packages installed with `nix profile install`
+# survive between sessions despite `podman run --rm`.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends xz-utils \
+ && rm -rf /var/lib/apt/lists/* \
+ && install -d -m 0755 /etc/nix \
+ && printf '%s\n' \
+        'experimental-features = nix-command flakes' \
+        'sandbox = false' \
+        'build-users-group =' \
+        > /etc/nix/nix.conf \
+ && install -d -m 0755 -o developer -g developer /nix
+
+USER developer
+RUN curl -fsSL https://nixos.org/nix/install -o /tmp/nix-install.sh \
+ && HOME=/home/developer sh /tmp/nix-install.sh \
+        --no-daemon --no-channel-add --no-modify-profile \
+ && rm /tmp/nix-install.sh
+USER root
+
+# Snapshot the post-install home so the runtime entrypoint can restore it.
+# The single-user Nix install writes its profile symlinks into $HOME
+# (~/.nix-profile and ~/.local/state/nix/profiles/...); those symlinks are what
+# put `nix` on PATH -- the store itself lives under /nix. At runtime the wrapper
+# bind-mounts a persistent host dir over /home/developer (see default.nix),
+# which masks those symlinks on first run, so `nix` would be missing even though
+# the /nix store volume survives. Stashing the home-side state at /nix-home-skel
+# -- a plain image path, neither under the masked home nor the /nix volume --
+# lets entrypoint.sh seed it into the empty home on first launch. The `test`
+# asserts the profile resolves now, so a future installer change that relocates
+# it fails the build loudly instead of silently shipping a broken image.
+RUN test -e /home/developer/.nix-profile/bin/nix \
+ && mkdir -p /nix-home-skel \
+ && cp -a /home/developer/. /nix-home-skel/ \
+ && chown -R developer:developer /nix-home-skel
+
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER developer
 WORKDIR /workspace
+# nix lives under /nix (persisted), so it stays on PATH even on the first run
+# when the bind-mounted home is still empty. The XDG state and ~/.nix-profile
+# dirs hold packages the user installs later; they may not exist yet, which is
+# harmless. NIX_SSL_CERT_FILE lets nix fetch over HTTPS without the profile's
+# nix.sh being sourced.
 ENV HOME=/home/developer \
     USE_BUILTIN_RIPGREP=0 \
-    DISABLE_AUTOUPDATER=1
+    DISABLE_AUTOUPDATER=1 \
+    NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt \
+    PATH=/home/developer/.local/state/nix/profiles/profile/bin:/home/developer/.nix-profile/bin:/nix/var/nix/profiles/per-user/developer/profile/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 ENTRYPOINT ["entrypoint.sh"]

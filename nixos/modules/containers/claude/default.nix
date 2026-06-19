@@ -46,9 +46,15 @@ let
       STATE_DIR="$HOME/.local/state/claude-code-container"
       mkdir -p "$STATE_DIR"
 
+      # A named volume (not a bind mount) for the Nix store: podman seeds it
+      # from the image's /nix on first use, so the in-image Nix install is
+      # preserved while packages the user installs later persist across runs.
+      # Remove it with `podman volume rm claude-code-nix` to pick up a Nix
+      # upgrade after the image is rebuilt.
       MOUNT_ARGS=(
         -v "$REPO_ROOT:/workspace"
         -v "$STATE_DIR:/home/developer"
+        -v "claude-code-nix:/nix"
       )
       if [ -f "$HOME/.gitconfig" ]; then
         MOUNT_ARGS+=(-v "$HOME/.gitconfig:/home/developer/.gitconfig:ro")
