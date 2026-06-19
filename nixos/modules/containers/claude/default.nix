@@ -48,10 +48,10 @@ let
 
       MOUNT_ARGS=(
         -v "$REPO_ROOT:/workspace"
-        -v "$STATE_DIR:/home/dev"
+        -v "$STATE_DIR:/home/developer"
       )
       if [ -f "$HOME/.gitconfig" ]; then
-        MOUNT_ARGS+=(-v "$HOME/.gitconfig:/home/dev/.gitconfig:ro")
+        MOUNT_ARGS+=(-v "$HOME/.gitconfig:/home/developer/.gitconfig:ro")
       fi
 
       ENV_ARGS=()
