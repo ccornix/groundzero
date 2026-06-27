@@ -5,6 +5,7 @@
     ./containers
     ./core
     ./desktop
+    ./forgejo
     ./gaming
     ./hardware
     ./network

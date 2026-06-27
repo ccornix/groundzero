@@ -16,6 +16,7 @@
       enable = true;
       brotherMfp.enable = true;
     };
+    forgejo.runner.enable = true;
     gaming = {
       devilutionx.enable = true;
       diablo2.enable = true;
