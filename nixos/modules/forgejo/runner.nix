@@ -10,26 +10,36 @@ let
   dockerHost = "unix:///run/user/${uidStr}/podman/podman.sock";
 
   # Non-secret runner config generated from Nix options. Forgejo's connection
-  # model takes labels from the config's `runner.labels`, so they cannot be a
-  # daemon flag; we generate them here and concatenate with the out-of-store
-  # connection file at start. `runner.*` and `server.*` are distinct top-level
-  # YAML keys, so plain concatenation yields a valid document and the token
-  # never enters the world-readable Nix store.
-  labelsYaml = pkgs.writeText "forgejo-runner-labels.yaml"
+  # model takes settings like log level and labels from the config file (not
+  # daemon flags); we generate them here and concatenate with the out-of-store
+  # connection file at start. `log.*`, `runner.*` and `server.*` are distinct
+  # top-level YAML keys, so plain concatenation yields a valid document and the
+  # token never enters the world-readable Nix store.
+  runnerYaml = pkgs.writeText "forgejo-runner.yaml"
     (lib.concatStringsSep "\n" ([
+      "log:"
+      "  level: ${cfg.logLevel}"
       "runner:"
       "  labels:"
     ] ++ map (label: "    - ${label}") cfg.labels) + "\n");
 
   mergeConfig = pkgs.writeShellScript "forgejo-runner-merge-config" ''
     set -eu
-    cat ${labelsYaml} ${lib.escapeShellArg cfg.connectionFile} \
+    cat ${runnerYaml} ${lib.escapeShellArg cfg.connectionFile} \
       > "$RUNTIME_DIRECTORY/config.yaml"
   '';
 in
 {
   options.my.forgejo.runner = {
     enable = lib.mkEnableOption "Forgejo Actions runner";
+
+    logLevel = lib.mkOption {
+      type = lib.types.enum [ "trace" "debug" "info" "warn" "error" "fatal" "panic" ];
+      default = "info";
+      description = ''
+        Daemon log level, written to the runner config's `log.level`.
+      '';
+    };
 
     connectionFile = lib.mkOption {
       type = lib.types.str;
