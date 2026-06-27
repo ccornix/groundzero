@@ -64,8 +64,11 @@ in
 
     labels = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "docker:docker://node:lts-trixie-slim" ];
-      example = [ "node-lts:docker://node:lts-trixie-slim" "host:host" ];
+      default = [ "ccornix-docker:docker://node:lts-trixie-slim" ];
+      example = [
+        "ccornix-node-lts:docker://node:lts-trixie-slim"
+        "ccornix-host:host"
+      ];
       description = ''
         Runner labels in `<name>:<executor>` form, where `<name>` is what
         workflows match in `runs-on:` and `<executor>` is e.g.
