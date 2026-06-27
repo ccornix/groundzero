@@ -8,6 +8,24 @@ let
   # Rootless podman API socket, owned by the runner user. Job containers run
   # inside the runner user's UID namespace rather than as root.
   dockerHost = "unix:///run/user/${uidStr}/podman/podman.sock";
+
+  # Non-secret runner config generated from Nix options. Forgejo's connection
+  # model takes labels from the config's `runner.labels`, so they cannot be a
+  # daemon flag; we generate them here and concatenate with the out-of-store
+  # connection file at start. `runner.*` and `server.*` are distinct top-level
+  # YAML keys, so plain concatenation yields a valid document and the token
+  # never enters the world-readable Nix store.
+  labelsYaml = pkgs.writeText "forgejo-runner-labels.yaml"
+    (lib.concatStringsSep "\n" ([
+      "runner:"
+      "  labels:"
+    ] ++ map (label: "    - ${label}") cfg.labels) + "\n");
+
+  mergeConfig = pkgs.writeShellScript "forgejo-runner-merge-config" ''
+    set -eu
+    cat ${labelsYaml} ${lib.escapeShellArg cfg.connectionFile} \
+      > "$RUNTIME_DIRECTORY/config.yaml"
+  '';
 in
 {
   options.my.forgejo.runner = {
@@ -17,16 +35,17 @@ in
       type = lib.types.str;
       default = "/var/lib/gitea-runner/connection.yaml";
       description = ''
-        Path to the runner's connection configuration, read by the daemon at
-        start. It holds the per-runner identity (Forgejo instance URL, UUID and
-        token) and is deliberately kept out of the Nix store, so the token never
-        enters the world-readable store.
+        Path to the runner's connection configuration, read at start and kept
+        out of the Nix store so the token never enters the world-readable store.
+        It must contain ONLY the `server.connections` block (the per-runner
+        identity); labels are supplied by the `labels` option below and merged
+        in at start.
 
         Recent Forgejo dropped the legacy shared "registration token" flow (the
         deprecated `forgejo-runner register` step) in favour of per-runner
         connection credentials. Create a runner at
         <instance>/user/settings/actions/runners and copy the YAML it shows
-        (once!) into this file, readable only by the runner user, e.g.:
+        (once!) into this file, readable only by the runner user:
 
           sudo -u gitea-runner tee /var/lib/gitea-runner/connection.yaml >/dev/null <<'EOF'
           server:
@@ -98,7 +117,8 @@ in
     # socket is listening from boot.
     systemd.user.sockets.podman.wantedBy = [ "sockets.target" ];
 
-    # Drive the daemon directly with the connection file. The legacy
+    # Drive the daemon with a config merged at start from the Nix-generated
+    # labels and the out-of-store connection file. The legacy
     # `services.gitea-actions-runner` module is built around the deprecated
     # `register` flow and is intentionally not used.
     systemd.services.forgejo-runner = {
@@ -117,10 +137,13 @@ in
         Group = "gitea-runner";
         StateDirectory = "gitea-runner"; # /var/lib/gitea-runner
         WorkingDirectory = "/var/lib/gitea-runner";
-        ExecStart = lib.concatStringsSep " " ([
+        RuntimeDirectory = "forgejo-runner"; # /run/forgejo-runner (tmpfs)
+        RuntimeDirectoryMode = "0700";
+        UMask = "0077";
+        ExecStartPre = mergeConfig;
+        ExecStart =
           "${pkgs.forgejo-runner}/bin/forgejo-runner daemon"
-          "--config ${cfg.connectionFile}"
-        ] ++ map (label: "--label ${label}") cfg.labels);
+          + " --config /run/forgejo-runner/config.yaml";
         Restart = "on-failure";
         RestartSec = 5;
       };
