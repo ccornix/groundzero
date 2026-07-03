@@ -30,10 +30,7 @@
       netbird.enable = true;
       tailscale.enable = true;
     };
-    # virtualization = {
-    #   enable = true;
-    #   persistent = false;
-    # };
+    # virtualization.enable = true;
     zfs.enable = true;
   };
 
