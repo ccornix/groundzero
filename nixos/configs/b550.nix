@@ -104,7 +104,7 @@
   # The state dir holds only the ephemeral driver socket, so it isn't persisted.
   # Because impermanence wipes the root on every boot and nothing else creates the
   # dir, recreate it here so upsd has somewhere to place its socket.
-  systemd.tmpfiles.rules = [ "d /var/lib/nut 0770 root nut -" ];
+  systemd.tmpfiles.rules = [ "d /var/lib/nut 0700 root root -" ];
 
   # WORKAROUND: the power.ups module orders the services upsmon -> upsd -> upsdrv,
   # i.e. the driver starts last, so on boot upsd/upsmon poll before usbhid-ups has
