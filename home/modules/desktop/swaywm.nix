@@ -33,6 +33,10 @@ let
   altMod = "Mod1";
 
   bindingModes = import ./swaywm/modes.nix { inherit config pkgs lib mod; };
+
+  # kanshi crash-loops on an empty config ("failed to parse config file"), so
+  # only run it on hosts that actually declare output profiles.
+  hasOutputProfiles = config.services.kanshi.settings != [ ];
 in
 {
   options.my.desktop.swaywm = with lib; {
@@ -272,10 +276,6 @@ in
           {
             command = "${pkgs.autotiling}/bin/autotiling";
           }
-          {
-            command = "${pkgs.kanshi}/bin/kanshi";
-            always = true;
-          }
           { command = "mkfifo $SWAYSOCK.wob && tail -f $SWAYSOCK.wob | wob"; }
         ];
 
@@ -314,7 +314,7 @@ in
       '';
     }; # wayland.windowManager.sway
 
-    services.kanshi.enable = true;
+    services.kanshi.enable = hasOutputProfiles;
 
     services.swayidle = {
       enable = true;
