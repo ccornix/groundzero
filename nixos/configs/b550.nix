@@ -104,6 +104,28 @@
     };
   };
 
+  # The state dir holds only the ephemeral driver socket, so it isn't persisted.
+  # Because impermanence wipes the root on every boot and nothing else creates the
+  # dir, recreate it here so upsd has somewhere to place its socket.
+  systemd.tmpfiles.rules = [ "d /var/lib/nut 0770 root nut -" ];
+
+  # WORKAROUND: the power.ups module orders the services upsmon -> upsd -> upsdrv,
+  # i.e. the driver starts last, so on boot upsd/upsmon poll before usbhid-ups has
+  # created its socket ("No such file", "Driver not connected", "Variable not
+  # supported"). Reverse the chain to upsdrv -> upsd -> upsmon so the driver (with
+  # its staged variables) is up before anything connects. mkForce clears the
+  # module's edges on both sides to avoid a cyclic ordering; systemd's target
+  # ordering is kept.
+  systemd.services.upsdrv = {
+    after = lib.mkForce [ ];
+    before = lib.mkForce [ ];
+  };
+  systemd.services.upsd = {
+    after = lib.mkForce [ "network.target" "upsdrv.service" ];
+    before = lib.mkForce [ ];
+  };
+  systemd.services.upsmon.after = lib.mkForce [ "network.target" "upsd.service" ];
+
   system.stateVersion = "25.05";
 
   disko.devices = {
