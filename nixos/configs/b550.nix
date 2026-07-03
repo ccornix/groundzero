@@ -143,7 +143,7 @@
                 type = "filesystem";
                 format = "vfat";
                 mountpoint = "/boot";
-                # Fix world-accessible /boot/loader/random-seed
+                # WORKAROUND: Fix world-accessible /boot/loader/random-seed
                 # https://github.com/nix-community/disko/issues/527#issuecomment-1924076948
                 mountOptions = [ "umask=0077" ];
               };
