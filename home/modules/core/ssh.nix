@@ -7,6 +7,8 @@
       settings."*" = {
         ForwardAgent = true;
         AddKeysToAgent = "yes";
+        ForwardX11 = "yes";
+        ForwardX11Trusted = "yes";
       };
       enableDefaultConfig = false;
     };
