@@ -33,6 +33,14 @@ RUN apt-get update \
 
 # Claude Code, from Anthropic's signed apt repository. Key fingerprint per
 # https://code.claude.com/docs/en/setup#install-with-linux-package-managers
+#
+# The version is pinned so the image is reproducible and upgrades are explicit:
+# bump CLAUDE_CODE_VERSION, `nixos-rebuild switch`, then run `claude` (the
+# changed line busts Podman's layer cache; the changed file changes the build
+# context's store hash, so the wrapper's `podman image exists` check misses and
+# rebuilds). Available versions:
+#   curl -fsSL https://downloads.claude.ai/claude-code/apt/stable/dists/stable/main/binary-amd64/Packages | awk '/^Version:/{print $2}' | sort -V | tail
+ARG CLAUDE_CODE_VERSION=2.1.292-1
 RUN install -d -m 0755 /etc/apt/keyrings \
  && curl -fsSL https://downloads.claude.ai/keys/claude-code.asc \
         -o /etc/apt/keyrings/claude-code.asc \
@@ -41,7 +49,7 @@ RUN install -d -m 0755 /etc/apt/keyrings \
  && echo "deb [signed-by=/etc/apt/keyrings/claude-code.asc] https://downloads.claude.ai/claude-code/apt/stable stable main" \
         > /etc/apt/sources.list.d/claude-code.list \
  && apt-get update \
- && apt-get install -y --no-install-recommends claude-code \
+ && apt-get install -y --no-install-recommends "claude-code=$CLAUDE_CODE_VERSION" \
  && rm -rf /var/lib/apt/lists/*
 
 # Unprivileged user, fixed at uid/gid 1000. Podman's
